@@ -1,21 +1,21 @@
 variable "access_key_id" {
- type = string
+  type = string
 }
 variable "secret_access_key" {
   type = string
 }
 
 terraform {
-  required_providers{
-    aws={
-        source = "hashicorp/aws"
-        version = "~> 6.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
     }
   }
 }
 
-provider "aws"{
-    region = "us-east-1"
-    access_key = var.access_key_id
-    secret_key = var.secret_access_key
+provider "aws" {
+  region     = "us-east-1"
+  access_key = var.access_key_id
+  secret_key = var.secret_access_key
 }

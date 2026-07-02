@@ -3,17 +3,17 @@ module "security_group_web" {
 
   name        = "HTTP/HTTPS"
   description = "Allow HTTP/HTTPS inbound traffic for specific ports"
-  vpc_id       = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress_rules = {
     http = {
-      from_port = 80
+      from_port   = 80
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "HTTP from internal"
     }
     https = {
-      from_port = 443
+      from_port   = 443
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "HTTPS from internal"
@@ -43,11 +43,11 @@ module "security_group_mariadb" {
 
   name        = "MariaDB"
   description = "Allow MariaDB inbound traffic for specific ports"
-  vpc_id       = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress_rules = {
     tcp = {
-      from_port = 3306
+      from_port   = 3306
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.2.0/24"
       description = "MariaDB from internal"
@@ -76,11 +76,11 @@ module "security_group_jenkins" {
 
   name        = "Jenkins"
   description = "Allow Jenkins inbound traffic for specific ports"
-  vpc_id       = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress_rules = {
     tcp = {
-      from_port = 8080
+      from_port   = 8080
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.101.0/24"
       description = "Jenkins from internal"
@@ -111,23 +111,23 @@ module "security_group_consul" {
 
   name        = "Consul"
   description = "Allow Consul inbound traffic for specific ports"
-  vpc_id       = module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   ingress_rules = {
     tcp = {
-      from_port = 8500
+      from_port   = 8500
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "Consul TCP"
     }
     tcp = {
-      from_port = 8501
+      from_port   = 8501
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "Consul HTTPs"
     }
     tcp = {
-      from_port = 8300
+      from_port   = 8300
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "Consul connection to servers"

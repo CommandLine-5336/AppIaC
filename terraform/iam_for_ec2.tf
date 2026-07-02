@@ -1,18 +1,18 @@
 resource "aws_iam_policy" "ec2-to-s3" {
-  name        = "ec2-to-s3"
+  name = "ec2-to-s3"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-        Sid    = "ObjectGetPut"
-        Effect = "Allow"
-        Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-        ]
-        Resource = [
-          "arn:aws:s3:::images-bucket-704427427594-us-east-1/*",
-          "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*"
-        ]
+      Sid    = "ObjectGetPut"
+      Effect = "Allow"
+      Action = [
+        "s3:GetObject",
+        "s3:PutObject",
+      ]
+      Resource = [
+        "arn:aws:s3:::images-bucket-704427427594-us-east-1/*",
+        "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*"
+      ]
       },
       {
         Sid    = "ListBuckets"
@@ -30,10 +30,10 @@ resource "aws_iam_policy" "ec2-to-s3" {
 }
 
 module "iam_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.6.1"
 
-  name = "ec2-s3-access-role"
+  name                    = "ec2-s3-access-role"
   create_instance_profile = true
 
   trust_policy_permissions = {
@@ -48,9 +48,9 @@ module "iam_role" {
 
 
   policies = {
-    S3allowsEC2 = aws_iam_policy.ec2-to-s3.arn,
+    S3allowsEC2          = aws_iam_policy.ec2-to-s3.arn,
     allowSecretManagment = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
-    allowSSM = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    allowSSM             = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
 
   tags = {
