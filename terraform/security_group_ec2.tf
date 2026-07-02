@@ -1,5 +1,6 @@
 module "security_group_web" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
 
   name        = "HTTP/HTTPS"
   description = "Allow HTTP/HTTPS inbound traffic for specific ports"
@@ -33,13 +34,14 @@ module "security_group_web" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = "Dev"
   }
 }
 
 
 module "security_group_mariadb" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
 
   name        = "MariaDB"
   description = "Allow MariaDB inbound traffic for specific ports"
@@ -67,12 +69,13 @@ module "security_group_mariadb" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = "Dev"
   }
 }
 
 module "security_group_jenkins" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
 
   name        = "Jenkins"
   description = "Allow Jenkins inbound traffic for specific ports"
@@ -100,33 +103,34 @@ module "security_group_jenkins" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = "Dev"
   }
 }
 
 
 
 module "security_group_consul" {
-  source = "terraform-aws-modules/security-group/aws"
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
 
   name        = "Consul"
   description = "Allow Consul inbound traffic for specific ports"
   vpc_id      = module.vpc.vpc_id
 
   ingress_rules = {
-    tcp = {
+    consul_ui = {
       from_port   = 8500
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "Consul TCP"
     }
-    tcp = {
+    consul_https = {
       from_port   = 8501
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
       description = "Consul HTTPs"
     }
-    tcp = {
+    consul_server = {
       from_port   = 8300
       ip_protocol = "TCP"
       cidr_ipv4   = "10.0.1.0/24"
@@ -147,6 +151,6 @@ module "security_group_consul" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = "Dev"
   }
 }
