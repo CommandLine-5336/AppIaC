@@ -1,0 +1,78 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+   - name: update apt
+     ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 3600
+   - name: ansible install awscli
+     ansible.builtin.apt:
+       name: awscli
+       state: present
+   - name: Ensure correct configuration for VM
+     ansible.builtin.lineinfile:
+       path: /etc/ssh/sshd_config
+       regexp: "{{ item.regexp }}"
+       line: "{{ item.line }}"
+       state: present
+     loop:
+         - regexp: '^#*PasswordAuthentication.*'
+           line: 'PasswordAuthentication no'
+         - regexp: '^#*PermitEmptyPasswords.*'
+           line: 'PermitEmptyPasswords no'
+         - regexp: '^#*PubkeyAuthentication.*'
+           line: 'PubkeyAuthentication yes'
+         - regexp: '^#*PermitRootLogin.*'
+           line: 'PermitRootLogin no'
+     notify: Restart SSH
+
+   - name: install trivy
+     ansible.builtin.shell: |
+       curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+     args:
+       creates: /usr/local/bin/trivy
+   - name: install consul
+     ansible.builtin.shell: |
+       wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+       sudo apt update && sudo apt install consul -y
+     args:
+       creates: /usr/bin/consul
+   - name: create trivy directory
+     ansible.builtin.file:
+       path: /var/log/trivy
+       state: directory
+       mode: "0755"
+   - name: Run trivy scan regularly
+     ansible.builtin.cron:
+       name: "Run trivy scan"
+       minute: "0"
+       hour: "1"
+       user: root
+       job: >
+         trivy fs
+         --severity HIGH,CRITICAL
+         --timeout 10m
+         --format table
+         --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).txt"
+         / &&
+         aws s3 cp "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).txt" "s3://security-scan-bucket-704427427594-us-east-1/"
+   - name: Add ssh keys for the entire team
+     ansible.posix.authorized_key:
+       user: "{{ item.user }}"
+       state: present
+       key: "{{ item.key }}"
+     loop:
+       - {user: ubuntu, key: "{{ lookup('file', './bohdan.pub') }}"}
+       - {user: ubuntu, key: "{{ lookup('file', './bozhena.pub') }}"}
+       - {user: ubuntu, key: "{{ lookup('file', './maksym.pub') }}"}
+       - {user: ubuntu, key: "{{ lookup('file', './marta.pub') }}"}
+       - {user: ubuntu, key: "{{ lookup('file', './anastasiya.pub') }}"}
+
+  handlers:
+   - name: Restart SSH
+     ansible.builtin.service:
+       name: ssh
+       state: restarted
