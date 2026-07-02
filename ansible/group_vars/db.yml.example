@@ -1,0 +1,5 @@
+mariadb_name: "birdwatching"
+mariadb_user: "mariadb_user_here"
+mariadb_password: "mariadb_password_here"
+mariadb_bind_address: 0.0.0.0
+mariadb_allowed_host: "192.168.56.%"

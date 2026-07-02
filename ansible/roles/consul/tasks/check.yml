@@ -1,0 +1,13 @@
+- name: Check Consul status
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:8500/v1/status/leader"
+    method: GET
+  register: consul_api_status
+  until: consul_api_status.status == 200
+  retries: 5
+  delay: 2
+
+- name: Display Consul status
+  ansible.builtin.debug:
+    msg: "Consul is UP!"
+  when: consul_api_status.status == 200

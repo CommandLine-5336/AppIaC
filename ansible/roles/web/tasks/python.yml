@@ -1,0 +1,7 @@
+- name: Dependencies installation
+  ansible.builtin.pip:
+    requirements: "{{ web_app_dir }}/BirdWatchingApp/requirements.txt"
+    virtualenv: "{{ web_app_dir }}/BirdWatchingApp/venv"
+    virtualenv_command: python3 -m venv
+  become: true
+  become_user: "{{ web_user }}"

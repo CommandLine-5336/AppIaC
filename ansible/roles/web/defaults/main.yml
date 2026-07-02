@@ -1,0 +1,8 @@
+web_app_name: BirdWatching
+web_app_dir: "/home/{{ web_user }}/{{ web_app_name }}"
+web_user: vagrant
+web_repo_url: "https://github.com/KlimukhMaksim/test_ansible.git"
+web_app_port: 5000
+
+web_db_host: "192.168.1.110"
+web_db_port: 3306
