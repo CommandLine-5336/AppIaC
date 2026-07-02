@@ -102,8 +102,6 @@ resource "aws_vpc_security_group_egress_rule" "db_outbound" {
   cidr_ipv4         = "10.0.0.0/16"
 }
 
-
-
 resource "aws_security_group" "jenkins" {
   name_prefix = "jenkins"
   description = "Allow Jenkins inbound traffic for specific ports"
