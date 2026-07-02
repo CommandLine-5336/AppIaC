@@ -11,8 +11,8 @@ packer {
   }
 }
 source "amazon-ebs" "ubuntu-golden-image" {
-  ami_name      = "packer-ubuntu-golden-image"
-  instance_type = "t3.micro"
+  ami_name      = "packer-ubuntu-golden-image-{{timestamp}}"
+  instance_type = "t3.small"
   region        = "us-east-1"
   source_ami_filter {
     filters = {
@@ -37,7 +37,7 @@ source "amazon-ebs" "ubuntu-golden-image" {
 build {
   sources = ["source.amazon-ebs.ubuntu-golden-image"]
   provisioner "ansible" {
-    playbook_file = "./packer_playbook.yaml"
-    galaxy_file   = "./requirements.yaml"
+    playbook_file   = "./packer_playbook.yaml"
+    galaxy_file     = "./requirements.yaml"
   }
 }

@@ -40,6 +40,23 @@
        sudo apt update && sudo apt install consul -y
      args:
        creates: /usr/bin/consul
+   - name: install and configure datadog agent
+     ansible.builtin.import_role:
+       name: datadog.dd.agent
+     vars:
+       datadog_api_key: "ENC[DatadogAgent/Production;api_key]"
+       datadog_site: datadoghq.com
+       datadog_agent_major_version: 7
+       datadog_config:
+         apm_config:
+           enabled: true
+         logs_enabled: true
+         process_config:
+           enabled: "false"
+         secret_backend_type: aws.secrets
+         secret_backend_config:
+           aws_session:
+             aws_region: us-east-1
    - name: create trivy directory
      ansible.builtin.file:
        path: /var/log/trivy
