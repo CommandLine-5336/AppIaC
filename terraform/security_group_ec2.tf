@@ -2,8 +2,8 @@ resource "aws_security_group" "lb" {
   name_prefix = "lb"
   description = "Security group for Public/Private Load Balancer"
   vpc_id      = module.vpc.vpc_id
-  tags        = {
-      Environment = "Dev"
+  tags = {
+    Environment = "Dev"
   }
   lifecycle {
     create_before_destroy = true
@@ -39,7 +39,7 @@ resource "aws_security_group" "web" {
   description = "Security group for web instances"
   vpc_id      = module.vpc.vpc_id
   tags = {
-     Environment = "Dev"
+    Environment = "Dev"
   }
   lifecycle {
     create_before_destroy = true
@@ -72,7 +72,7 @@ resource "aws_security_group" "MariaDB" {
   description = "Security group for MariaDB instances"
   vpc_id      = module.vpc.vpc_id
   tags = {
-     Environment = "Dev"
+    Environment = "Dev"
   }
   lifecycle {
     create_before_destroy = true
@@ -80,12 +80,12 @@ resource "aws_security_group" "MariaDB" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "db_web" {
-  security_group_id            = aws_security_group.MariaDB.id
-  description                  = "MySQL from web servers"
-  from_port                    = 3306
-  to_port                      = 3306
-  ip_protocol                  = "tcp"
-  cidr_ipv4                    = "10.0.1.0/24"
+  security_group_id = aws_security_group.MariaDB.id
+  description       = "MySQL from web servers"
+  from_port         = 3306
+  to_port           = 3306
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.1.0/24"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "db_self" {
@@ -109,7 +109,7 @@ resource "aws_security_group" "jenkins" {
   description = "Allow Jenkins inbound traffic for specific ports"
   vpc_id      = module.vpc.vpc_id
   tags = {
-      Environment = "Dev"
+    Environment = "Dev"
   }
   lifecycle {
     create_before_destroy = true
@@ -143,7 +143,7 @@ resource "aws_security_group" "consul" {
   description = "Allow Consul inbound traffic for specific ports"
   vpc_id      = module.vpc.vpc_id
   tags = {
-      Environment = "Dev"
+    Environment = "Dev"
   }
   lifecycle {
     create_before_destroy = true

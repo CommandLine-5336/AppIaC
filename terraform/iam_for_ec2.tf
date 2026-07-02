@@ -26,7 +26,7 @@ resource "aws_iam_policy" "ec2-to-s3" {
           "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1",
           "arn:aws:s3:::jenkins-bucket-704427427594-us-east-1"
         ]
-      },{
+        }, {
         Sid    = "ListBuckets"
         Effect = "Allow"
         Action = [
@@ -43,7 +43,7 @@ resource "aws_iam_policy" "ec2-to-s3" {
         ]
         Resource = ["*"]
       }
-  ]
+    ]
   })
 }
 
