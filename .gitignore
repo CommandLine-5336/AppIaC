@@ -21,3 +21,10 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+
+terraform/.terraform
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate
+terraform/terraform.tfvars
