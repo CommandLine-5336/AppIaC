@@ -1,0 +1,7 @@
+---
+- name: Configure MariaDB Server
+  hosts: db
+  become: yes
+  gather_facts: true
+  roles:
+  - role: db

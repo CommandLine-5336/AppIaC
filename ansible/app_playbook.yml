@@ -1,0 +1,7 @@
+---
+- name: Configure Web servers
+  hosts: web
+  become: yes
+  gather_facts: true
+  roles:
+  - role: web
