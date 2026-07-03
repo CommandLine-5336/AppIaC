@@ -1,0 +1,7 @@
+- name: Clone repo
+  ansible.builtin.git:
+    repo: "{{ web_repo_url }}"
+    dest: "{{ web_app_dir }}"
+    version: main
+  become: true
+  become_user: "{{ web_user }}"

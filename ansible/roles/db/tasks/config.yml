@@ -1,0 +1,16 @@
+- name: Ensure bind-address is commented out in system config
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: '#bind-address = 127.0.0.1'
+    state: present
+  notify: Restart mariadb
+
+- name: Deploy custom configuration
+  ansible.builtin.template:
+    src: 99-custom.cnf.j2
+    dest: "{{ db_maria_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart mariadb

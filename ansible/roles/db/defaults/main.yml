@@ -1,0 +1,2 @@
+db_maria_socket: /var/run/mysqld/mysqld.sock
+db_maria_config_file: "/etc/mysql/mariadb.conf.d/99-custom.cnf"

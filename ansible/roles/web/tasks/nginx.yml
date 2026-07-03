@@ -1,0 +1,20 @@
+---
+- name: Deploy Nginx configuration
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/sites-available/{{ web_app_name }}"
+    mode: '0644'
+  notify: Reload nginx
+
+- name: Enable Nginx site
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ web_app_name }}"
+    dest: "/etc/nginx/sites-enabled/{{ web_app_name }}"
+    state: link
+  notify: Reload nginx
+
+- name: Remove default Nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Reload nginx

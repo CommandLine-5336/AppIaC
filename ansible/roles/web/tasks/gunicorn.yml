@@ -1,0 +1,15 @@
+---
+- name: Deploy Gunicorn service
+  ansible.builtin.template:
+    src: flaskapp.service.j2
+    dest: "/etc/systemd/system/{{ web_app_name }}.service"
+    mode: '0644'
+  notify:
+  - Reload systemd
+  - Restart gunicorn
+
+- name: Enable and start Gunicorn
+  ansible.builtin.systemd:
+    name: "{{ web_app_name }}"
+    enabled: true
+    state: started

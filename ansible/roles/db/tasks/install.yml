@@ -1,0 +1,5 @@
+- name: Install MariaDB and dependencies
+  ansible.builtin.apt:
+    name: [ mariadb-server, python3-pymysql ]
+    state: present
+    update_cache: yes

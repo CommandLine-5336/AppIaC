@@ -1,0 +1,5 @@
+- name: Install system packages
+  ansible.builtin.apt:
+    name: [ nginx, git, python3-pip, python3-venv, python3-pymysql ]
+    state: present
+    update_cache: yes

@@ -1,0 +1,6 @@
+---
+- name: Configure Consul
+  hosts: consul
+  become: yes
+  roles:
+  - role: consul

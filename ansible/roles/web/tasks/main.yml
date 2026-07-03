@@ -1,0 +1,6 @@
+- ansible.builtin.import_tasks: install.yml
+- ansible.builtin.import_tasks: app.yml
+- ansible.builtin.import_tasks: python.yml
+- ansible.builtin.import_tasks: set_env.yml
+- ansible.builtin.import_tasks: gunicorn.yml
+- ansible.builtin.import_tasks: nginx.yml
