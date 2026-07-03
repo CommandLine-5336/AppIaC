@@ -1,0 +1,46 @@
+aws_region: "us-east-1"
+aws_environment: "Dev"
+
+vms:
+- name: "db"
+  provision_type: "ansible"
+  playbook: "ansible/db_playbook.yml"
+  ansible_groups: [ "db" ]
+  aws_tags:
+    Name: "db"
+    Role: "db"
+- name: "web01"
+  provision_type: "ansible"
+  playbook: "ansible/app_playbook.yml"
+  ansible_groups: [ "web" ]
+  aws_tags:
+    Name: "web01"
+    Role: "web"
+- name: "web02"
+  provision_type: "ansible"
+  playbook: "ansible/app_playbook.yml"
+  ansible_groups: [ "web" ]
+  aws_tags:
+    Name: "web02"
+    Role: "web"
+#- name: "lb"
+#  provision_type: "ansible"
+#  playbook: "ansible/db_playbook.yml"
+#  ansible_groups: [ "lb" ]
+#  aws_tags:
+#    Name: "lb"
+#    Role: "lb"
+#- name: "jenkins"
+#  provision_type: "ansible"
+#  playbook: "ansible/db_playbook.yml"
+#  ansible_groups: [ "jenkins" ]
+#  aws_tags:
+#    Name: "jenkins"
+#    Role: "jenkins"
+#- name: "consul"
+#  provision_type: "ansible"
+#  playbook: "ansible/db_playbook.yml"
+#  ansible_groups: [ "consul" ]
+#  aws_tags:
+#    Name: "consul"
+#    Role: "consul"

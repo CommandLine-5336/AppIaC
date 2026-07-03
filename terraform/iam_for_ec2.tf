@@ -11,21 +11,39 @@ resource "aws_iam_policy" "ec2-to-s3" {
       ]
       Resource = [
         "arn:aws:s3:::images-bucket-704427427594-us-east-1/*",
-        "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*"
+        "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*",
+        "arn:aws:s3:::jenkins-bucket-704427427594-us-east-1/*"
       ]
       },
       {
-        Sid    = "ListBuckets"
+        Sid    = "ListBucket"
         Effect = "Allow"
         Action = [
-          "s3:ListBucket",
-          "s3:ListAllMyBuckets"
+          "s3:ListBucket"
         ]
         Resource = [
           "arn:aws:s3:::images-bucket-704427427594-us-east-1",
-          "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1"
+          "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1",
+          "arn:aws:s3:::jenkins-bucket-704427427594-us-east-1"
         ]
-    }]
+        }, {
+        Sid    = "ListBuckets"
+        Effect = "Allow"
+        Action = [
+          "s3:ListAllMyBuckets"
+        ]
+        Resource = ["*"]
+      },
+      {
+        Sid    = "SSM"
+        Effect = "Allow"
+        Action = [
+          "ssm:StartSession",
+          "ssm:SendCommand"
+        ]
+        Resource = ["*"]
+      }
+    ]
   })
 }
 
@@ -49,7 +67,7 @@ module "iam_role" {
 
   policies = {
     S3allowsEC2          = aws_iam_policy.ec2-to-s3.arn,
-    allowSecretManagment = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+    allowSecretManagment = "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
     allowSSM             = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
 
