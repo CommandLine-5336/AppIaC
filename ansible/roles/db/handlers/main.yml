@@ -3,3 +3,8 @@
   ansible.builtin.systemd:
     name: mariadb
     state: restarted
+
+- name: Reload consul
+  ansible.builtin.service:
+    name: consul
+    state: reloaded

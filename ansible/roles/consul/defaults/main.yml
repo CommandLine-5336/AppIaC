@@ -4,7 +4,10 @@ consul_user: consul
 consul_group: consul
 consul_data_dir: /opt/consul/data
 consul_config_dir: /etc/consul.d
-consul_bootstrap_expect: 1
-consul_bind_addr: "192.168.56.13"
 consul_client_addr: "0.0.0.0"
-consul_server: true
+consul_server: false
+consul_retry_join: []
+
+consul_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+consul_download_url: >-
+  https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_{{ consul_arch }}.zip
