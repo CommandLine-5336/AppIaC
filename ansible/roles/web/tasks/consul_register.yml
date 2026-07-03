@@ -2,6 +2,6 @@
 - name: Register web service in Consul
   ansible.builtin.template:
     src: web-service.json.j2
-    dest: "{{ consul_config_dir }}/web-service.json"
+    dest: "{{ web_consul_config_dir }}/web-service.json"
     mode: '0644'
   notify: Reload consul
