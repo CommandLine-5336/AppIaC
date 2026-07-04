@@ -1,9 +1,9 @@
 data "aws_ami" "latest_packer_image" {
-    most_recent = true
-    owners      = ["self"]
+  most_recent = true
+  owners      = ["self"]
 
-    filter {
+  filter {
     name   = "name"
     values = ["packer-ubuntu-golden-image-*"]
-    }
+  }
 }

@@ -6,9 +6,9 @@ module "vpc" {
   cidr = "10.0.0.0/16"
 
   azs = ["us-east-1a"]
-  #private subnets for: load balancer, web1, web2, jenkins, consul and for mariadb
+  #private subnets for: load balancer, web1, web2, consul and for mariadb
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  #public subnet for load balancer
+  #public subnet for load balancer and jenkins,
   public_subnets = ["10.0.101.0/24"]
 
   enable_nat_gateway = true
