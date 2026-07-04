@@ -1,0 +1,13 @@
+#!groovy
+import jenkins.model.*
+import hudson.security.*
+
+def instance = Jenkins.getInstance()
+def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+instance.setSecurityRealm(hudsonRealm)
+hudsonRealm.createAccount("{{ creds.username }}", "{{ creds.password }}")
+
+def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+strategy.setAllowAnonymousRead(false)
+instance.setAuthorizationStrategy(strategy)
+instance.save()
