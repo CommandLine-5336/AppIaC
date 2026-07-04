@@ -12,3 +12,8 @@
   ansible.builtin.service:
     name: nginx
     state: reloaded
+
+- name: Reload consul
+  ansible.builtin.service:
+    name: consul
+    state: reloaded

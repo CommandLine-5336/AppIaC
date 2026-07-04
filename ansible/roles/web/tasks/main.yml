@@ -4,3 +4,4 @@
 - ansible.builtin.import_tasks: set_env.yml
 - ansible.builtin.import_tasks: gunicorn.yml
 - ansible.builtin.import_tasks: nginx.yml
+- ansible.builtin.import_tasks: consul_register.yml

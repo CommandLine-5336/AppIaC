@@ -1,0 +1,7 @@
+---
+- name: Register db service in Consul
+  ansible.builtin.template:
+    src: db-service.json.j2
+    dest: "{{ db_consul_config_dir }}/db-service.json"
+    mode: '0644'
+  notify: Reload consul

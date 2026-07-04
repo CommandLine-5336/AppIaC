@@ -2,3 +2,4 @@
 - ansible.builtin.import_tasks: install.yml
 - ansible.builtin.import_tasks: config.yml
 - ansible.builtin.import_tasks: database.yml
+- ansible.builtin.import_tasks: consul_register.yml

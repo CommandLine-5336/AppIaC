@@ -1,3 +1,4 @@
+---
 - name: Install unzip package
   ansible.builtin.apt:
     name: unzip
@@ -5,23 +6,31 @@
     update_cache: yes
   become: yes
 
-- name: Create user
+- name: Create consul system group
+  ansible.builtin.group:
+    name: "{{ consul_group }}"
+    system: yes
+  become: yes
+
+- name: Create consul system group and user
   ansible.builtin.user:
     name: "{{ consul_user }}"
     group: "{{ consul_group }}"
     system: yes
     shell: /bin/false
+  become: yes
 
 - name: Download and unzip Consul
   ansible.builtin.unarchive:
-    src: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_{{ 'arm64' if ansible_facts['architecture'] == 'aarch64' else 'amd64' }}.zip"
+    src: "{{ consul_download_url }}"
     dest: /usr/local/bin
     remote_src: yes
     mode: '0755'
     owner: root
     group: root
+  become: yes
 
-- name: Create the necessary directories
+- name: Create Consul directories
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -31,3 +40,4 @@
   loop:
   - "{{ consul_data_dir }}"
   - "{{ consul_config_dir }}"
+  become: yes

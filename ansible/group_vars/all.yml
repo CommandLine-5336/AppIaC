@@ -1,0 +1,1 @@
+consul_bind_addr: "{{ ansible_host }}"

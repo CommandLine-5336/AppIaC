@@ -2,6 +2,22 @@ datacenter = "{{ consul_datacenter }}"
 data_dir = "{{ consul_data_dir }}"
 bind_addr = "{{ consul_bind_addr }}"
 client_addr = "{{ consul_client_addr | default('127.0.0.1') }}"
+server = {{ consul_server | lower }}
 
-server = {{ consul_server }}
+{% if consul_server %}
 bootstrap_expect = {{ consul_bootstrap_expect }}
+{% endif %}
+
+{% if consul_retry_join | length > 0 %}
+retry_join = {{ consul_retry_join | to_json }}
+{% endif %}
+
+ports {
+  dns = 8600
+}
+
+{% if consul_server %}
+ui_config {
+  enabled = true
+}
+{% endif %}

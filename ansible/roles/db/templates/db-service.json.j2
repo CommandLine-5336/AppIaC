@@ -1,0 +1,11 @@
+{
+  "service": {
+    "name": "db",
+    "port": 3306,
+    "tags": ["mariadb"],
+    "check": {
+      "tcp": "127.0.0.1:3306",
+      "interval": "10s"
+    }
+  }
+}
