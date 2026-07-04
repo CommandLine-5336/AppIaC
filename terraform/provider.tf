@@ -6,7 +6,7 @@ variable "secret_access_key" {
 }
 
 terraform {
-  required_version = "1.9.5"
+  required_version = "1.15.7"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -17,6 +17,4 @@ terraform {
 
 provider "aws" {
   region     = "us-east-1"
-  access_key = var.access_key_id
-  secret_key = var.secret_access_key
 }
