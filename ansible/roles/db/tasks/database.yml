@@ -1,14 +1,15 @@
 - name: Create database
   ansible.mysql.mysql_db:
-    name: "{{ mariadb_name }}"
+    name: "{{ db_maria_name }}"
     state: present
     login_unix_socket: "{{ db_maria_socket }}"
 
 - name: Create user and grant privileges
   ansible.mysql.mysql_user:
-    name: "{{ mariadb_user }}"
-    password: "{{ mariadb_password }}"
-    priv: "{{ mariadb_name }}.*:ALL"
-    host: "{{ mariadb_allowed_host }}"
+    name: "{{ db_maria_user }}"
+    password: "{{ db_maria_password }}"
+    priv: "{{ db_maria_name }}.*:ALL"
+    host: "{{ db_maria_allowed_host }}"
     state: present
     login_unix_socket: "{{ db_maria_socket }}"
+    column_case_sensitive: false
