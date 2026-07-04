@@ -31,7 +31,7 @@ resource "aws_instance" "web" {
   iam_instance_profile   = module.iam_role.instance_profile_name
 
   tags = {
-    Name        = "Web-${count.index + 1}"
+    Name        = "web0${count.index + 1}"
     Role        = "web"
     Environment = "Dev"
   }

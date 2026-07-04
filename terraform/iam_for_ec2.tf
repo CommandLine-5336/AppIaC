@@ -1,5 +1,5 @@
-resource "aws_iam_policy" "ec2-to-s3" {
-  name = "ec2-to-s3"
+resource "aws_iam_policy" "ec2-to-s3-role" {
+  name = "ec2-to-s3-role"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -51,7 +51,7 @@ module "iam_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role"
   version = "6.6.1"
 
-  name                    = "ec2-s3-access-role"
+  name                    = "ec2-s3-access"
   create_instance_profile = true
 
   trust_policy_permissions = {
@@ -66,7 +66,7 @@ module "iam_role" {
 
 
   policies = {
-    S3allowsEC2          = aws_iam_policy.ec2-to-s3.arn,
+    S3allowsEC2          = aws_iam_policy.ec2-to-s3-role.arn,
     allowSecretManagment = "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
     allowSSM             = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
