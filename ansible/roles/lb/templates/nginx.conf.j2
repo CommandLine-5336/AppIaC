@@ -1,6 +1,6 @@
 upstream backend_servers {
 {% for host in groups['web'] %}
-    server {{ hostvars[host]['private_up_address'] | default(hostvars[host]['ansible_eth0']['ipv4']['address']) }};
+    server {{ hostvars[host]['private_ip_address'] | default(hostvars[host]['ansible_eth0']['ipv4']['address']) }};
 {% endfor %}
 }
 
