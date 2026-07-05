@@ -1,7 +1,6 @@
 ---
-- name: Configure Nginx Load BAlancer
+- name: Configure Load Balanser
   hosts: lb
   become: yes
-  gather_facts: yes
   roles:
-    - lb
+  - role: lb

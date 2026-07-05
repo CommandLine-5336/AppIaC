@@ -3,7 +3,7 @@
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-  notify: Reload Nginx
+  notify: Restart Nginx
 
 - name: Deploy Load Balancer configuration
   ansible.builtin.template:
@@ -12,14 +12,14 @@
     owner: root
     group: root
     mode: '0644'
-  notify: Reload Nginx
+  notify: Restart Nginx
 
 - name: Enable Load Balancer site
   ansible.builtin.file:
     src: /etc/nginx/sites-available/loadbalancer.conf
     dest: /etc/nginx/sites-enabled/loadbalancer.conf
     state: link
-  notify: Reload Nginx
+  notify: Restart Nginx
 
 - name: Ensure Nginx is running and enabled
   ansible.builtin.service:
