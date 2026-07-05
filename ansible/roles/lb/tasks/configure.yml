@@ -7,7 +7,7 @@
 
 - name: Deploy Load Balancer configuration
   ansible.builtin.template:
-    src: ngix.conf.j2
+    src: nginx.conf.j2
     dest: /etc/nginx/sites-available/loadbalancer.conf
     owner: root
     group: root
