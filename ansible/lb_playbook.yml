@@ -1,0 +1,7 @@
+---
+- name: Configure Nginx Load BAlancer
+  hosts: lb
+  become: yes
+  gather_facts: yes
+  roles:
+    - lb

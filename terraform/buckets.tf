@@ -8,6 +8,9 @@ resource "aws_s3_bucket" "images_bucket" {
     Environment = "Dev"
     Owner       = "CommandLine"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket" "security_scan_bucket" {
@@ -16,6 +19,9 @@ resource "aws_s3_bucket" "security_scan_bucket" {
     Name        = "Security scan"
     Environment = "Dev"
     Owner       = "CommandLine"
+  }
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
@@ -26,6 +32,9 @@ resource "aws_s3_bucket" "terraform_state_bucket" {
     Environment = "Dev"
     Owner       = "CommandLine"
   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket" "jenkins_bucket" {
@@ -34,5 +43,8 @@ resource "aws_s3_bucket" "jenkins_bucket" {
     Name        = "Jenkins"
     Environment = "Dev"
     Owner       = "CommandLine"
+  }
+  lifecycle {
+    prevent_destroy = true
   }
 }

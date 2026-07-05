@@ -1,0 +1,28 @@
+---
+- name: Remove default Nginx site configuration
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Reload Nginx
+
+- name: Deploy Load Balancer configuration
+  ansible.builtin.template:
+    src: ngix.conf.j2
+    dest: /etc/nginx/sites-available/loadbalancer.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload Nginx
+
+- name: Enable Load Balancer site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/loadbalancer.conf
+    dest: /etc/nginx/sites-enabled/loadbalancer.conf
+    state: link
+  notify: Reload Nginx
+
+- name: Ensure Nginx is running and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
