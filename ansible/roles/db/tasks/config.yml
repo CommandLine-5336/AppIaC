@@ -5,4 +5,4 @@
     regexp: '^bind-address\s*='
     line: 'bind-address = 0.0.0.0'
     state: present
-  notify: restart mariadb
+  notify: Restart mariadb

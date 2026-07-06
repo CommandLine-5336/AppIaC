@@ -1,0 +1,7 @@
+---
+- name: Register lb service in Consul
+  ansible.builtin.template:
+    src: lb-service.json.j2
+    dest: "{{ lb_consul_config_dir }}/lb-service.json"
+    mode: '0644'
+  notify: Reload consul
