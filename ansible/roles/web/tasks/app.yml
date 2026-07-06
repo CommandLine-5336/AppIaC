@@ -1,7 +1,6 @@
-- name: Clone repo
-  ansible.builtin.git:
-    repo: "{{ web_repo_url }}"
+- name: Clone App files
+  ansible.builtin.copy:
+    src: /var/lib/jenkins/workspace/multi_repo/BirdWathcingApp
     dest: "{{ web_app_dir }}"
-    version: main
   become: true
   become_user: "{{ web_user }}"
