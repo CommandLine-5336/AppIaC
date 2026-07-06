@@ -1,6 +1,6 @@
 all:
   children:
-    consul_servers:
+    consul:
       hosts:
         consul:
           ansible_host: 192.168.1.111
@@ -24,7 +24,7 @@ db:
 
 allhosts:
   children:
-    consul_servers:
+    consul:
     web:
     lbs:
     db:
