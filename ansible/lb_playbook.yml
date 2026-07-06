@@ -1,0 +1,6 @@
+---
+- name: Configure Load Balanser
+  hosts: lb
+  become: yes
+  roles:
+  - role: lb

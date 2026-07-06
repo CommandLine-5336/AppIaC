@@ -67,12 +67,12 @@ resource "aws_security_group" "web" {
   }
 }
 resource "aws_vpc_security_group_ingress_rule" "web_lb" {
-  security_group_id = aws_security_group.web.id
-  description       = "HTTP from internal"
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
-  cidr_ipv4         = "10.0.1.0/24"
+  security_group_id            = aws_security_group.web.id
+  description                  = "HTTP from internal"
+  from_port                    = 80
+  to_port                      = 80
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.lb.id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "web_self" {
