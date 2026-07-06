@@ -14,6 +14,16 @@ pipeline {
             }
         }
 
+        stage('Consul playbook') {
+            steps {
+                ansiblePlaybook(
+                    credentialsId: 'vm_ssh_key',
+                    installation: "Ansible",
+                    playbook: 'ansible/consul_playbook.yml'
+                )
+            }
+        }
+
         stage('MariaDB playbook') {
             steps {
                 withCredentials([
