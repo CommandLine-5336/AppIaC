@@ -1,3 +1,24 @@
+resource "aws_security_group" "ssm" {
+  name_prefix = "ssm"
+  description = "Security group for SSM endpoints"
+  vpc_id      = module.vpc.vpc_id
+  tags = {
+    Environment = "Dev"
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ssm_endpoint" {
+  security_group_id = aws_security_group.ssm.id
+  description       = "HTTPS from VPC"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.0.0/16"
+}
+
 resource "aws_security_group" "lb" {
   name_prefix = "lb"
   description = "Security group for Public/Private Load Balancer"
