@@ -5,7 +5,7 @@ module "vpc" {
   name = "cl-vpc"
   cidr = "10.0.0.0/16"
 
-  azs = ["us-east-1a"]
+  azs = ["us-east-1a", "us-east-1b", "us-east-1c"]
   #private subnets for: load balancer, web1, web2, consul and for mariadb
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
   #public subnet for load balancer and jenkins,
