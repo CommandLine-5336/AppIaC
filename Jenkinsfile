@@ -90,7 +90,11 @@ pipeline {
                             db_name: "$DB_NAME",
                             db_user: "$DB_USER",
                             db_password: "$DB_PASSWORD",
-                            secret_key: "$SECRET_KEY"
+                            secret_key: "$SECRET_KEY",
+                            s3_endpoint: "$S3_ENDPOINT",
+                            s3_access_key: "$S3_ACCESS_KEY",
+                            s3_secret_key: "$S3_SECRET_KEY",
+                            s3_bucket: "$S3_BUCKET"
                         ],
                         installation: 'Ansible',
                         playbook: 'ansible/app_playbook.yml'
