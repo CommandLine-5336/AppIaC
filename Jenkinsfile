@@ -66,6 +66,22 @@ pipeline {
                     string(
                         credentialsId: 'flask_secret_key',
                         variable: 'SECRET_KEY'
+                    ),
+                    string(
+                        credentialsId: 'app_s3_endpoint',
+                        variable: 'S3_ENDPOINT'
+                    ),
+                    string(
+                        credentialsId: 'app_s3_access_key',
+                        variable: 'S3_ACCESS_KEY'
+                    ),
+                    string(
+                        credentialsId: 'app_s3_secret_key',
+                        variable: 'S3_SECRET_KEY'
+                    ),
+                    string(
+                        credentialsId: 'app_s3_bucket',
+                        variable: 'S3_BUCKET'
                     )
                 ]) {
                     ansiblePlaybook(
