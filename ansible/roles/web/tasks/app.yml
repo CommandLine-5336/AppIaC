@@ -4,4 +4,4 @@
     dest: "{{ web_app_dir }}"
     owner: "{{ web_user }}"
     group: "{{ web_user }}"
-    mode: '0644'
+    mode: '0755'
