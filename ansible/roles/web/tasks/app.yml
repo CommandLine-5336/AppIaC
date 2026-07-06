@@ -1,6 +1,6 @@
 - name: Clone App files
   ansible.builtin.copy:
-    src: /var/lib/jenkins/workspace/multi_repo/BirdWathcingApp
+    src: /var/lib/jenkins/workspace/multi_repo/BirdWatchingApp
     dest: "{{ web_app_dir }}"
     owner: "{{ web_user }}"
     group: "{{ web_user }}"
