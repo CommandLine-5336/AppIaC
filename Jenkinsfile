@@ -6,6 +6,14 @@ pipeline {
     }
 
     stages {
+        stage('Clone App repo') {
+            steps {
+                dir('BirdWathcingApp') {
+                    git(url: 'https://github.com/CommandLine-5336/BirdWatchingApp.git', branch: 'main')
+                }
+            }
+        }
+        
         stage('MariaDB playbook') {
             steps {
                 withCredentials([
