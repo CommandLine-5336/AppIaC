@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ANSIBLE_CONFIG = 'Ansible/ansible.cfg'
+        ANSIBLE_CONFIG = 'ansible/ansible.cfg'
     }
 
     stages {
@@ -13,7 +13,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('MariaDB playbook') {
             steps {
                 withCredentials([
@@ -35,7 +35,7 @@ pipeline {
                             db_password: "$DB_PASSWORD"
                         ],
                         installation: 'Ansible',
-                        playbook: 'Ansible/db_playbook.yml'
+                        playbook: 'ansible/db_playbook.yml'
                     )
                 }
             }
@@ -67,7 +67,7 @@ pipeline {
                             secret_key: "$SECRET_KEY"
                         ],
                         installation: 'Ansible',
-                        playbook: 'Ansible/app_playbook.yml'
+                        playbook: 'ansible/app_playbook.yml'
                     )
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
                 ansiblePlaybook(
                     credentialsId: 'vm_ssh_key',
                     installation: 'Ansible',
-                    playbook: 'Ansible/lb_playbook.yml'
+                    playbook: 'ansible/lb_playbook.yml'
                 )
             }
 
