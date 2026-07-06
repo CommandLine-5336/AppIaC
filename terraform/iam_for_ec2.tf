@@ -8,6 +8,7 @@ resource "aws_iam_policy" "ec2-to-s3-role" {
       Action = [
         "s3:GetObject",
         "s3:PutObject",
+        "s3:DeleteObject"
       ]
       Resource = [
         "arn:aws:s3:::images-bucket-704427427594-us-east-1/*",

@@ -1,3 +1,24 @@
+resource "aws_security_group" "ssm" {
+  name_prefix = "ssm"
+  description = "Security group for SSM endpoints"
+  vpc_id      = module.vpc.vpc_id
+  tags = {
+    Environment = "Dev"
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ssm_endpoint" {
+  security_group_id = aws_security_group.ssm.id
+  description       = "HTTPS from VPC"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.0.0/16"
+}
+
 resource "aws_security_group" "lb" {
   name_prefix = "lb"
   description = "Security group for Public/Private Load Balancer"
@@ -28,6 +49,15 @@ resource "aws_vpc_security_group_ingress_rule" "lb_https_web" {
   cidr_ipv4         = "0.0.0.0/0"
 }
 
+resource "aws_vpc_security_group_ingress_rule" "lb_ssh" {
+  security_group_id = aws_security_group.lb.id
+  description       = "SSH from internal"
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.0.0/16"
+}
+
 resource "aws_vpc_security_group_egress_rule" "lb_outbound" {
   security_group_id = aws_security_group.lb.id
   ip_protocol       = "-1"
@@ -46,12 +76,21 @@ resource "aws_security_group" "web" {
   }
 }
 resource "aws_vpc_security_group_ingress_rule" "web_lb" {
-  security_group_id            = aws_security_group.web.id
-  description                  = "HTTP from internal"
-  from_port                    = 80
-  to_port                      = 80
-  ip_protocol                  = "tcp"
-  referenced_security_group_id = aws_security_group.lb.id
+  security_group_id = aws_security_group.web.id
+  description       = "HTTP from internal"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.1.0/24"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "web_ssh" {
+  security_group_id = aws_security_group.web.id
+  description       = "SSH from internal"
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.0.0/16"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "web_self" {
@@ -88,6 +127,15 @@ resource "aws_vpc_security_group_ingress_rule" "db_web" {
   cidr_ipv4         = "10.0.1.0/24"
 }
 
+resource "aws_vpc_security_group_ingress_rule" "db_ssh" {
+  security_group_id            = aws_security_group.MariaDB.id
+  description                  = "SSH from web servers"
+  from_port                    = 22
+  to_port                      = 22
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.web.id
+}
+
 resource "aws_vpc_security_group_ingress_rule" "db_self" {
   security_group_id            = aws_security_group.MariaDB.id
   description                  = "All traffic from members of this SG"
@@ -119,6 +167,15 @@ resource "aws_vpc_security_group_ingress_rule" "jenkins_tcp" {
   description       = "Jenkins from internal"
   from_port         = 8080
   to_port           = 8080
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "jenkins_ssh" {
+  security_group_id = aws_security_group.jenkins.id
+  description       = "SSH from internet"
+  from_port         = 22
+  to_port           = 22
   ip_protocol       = "tcp"
   cidr_ipv4         = "0.0.0.0/0"
 }
@@ -171,6 +228,15 @@ resource "aws_vpc_security_group_ingress_rule" "consul_server" {
   description       = "Consul connection to servers"
   from_port         = 8300
   to_port           = 8300
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "10.0.0.0/16"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "consul_ssh" {
+  security_group_id = aws_security_group.consul.id
+  description       = "SSH from internal"
+  from_port         = 22
+  to_port           = 22
   ip_protocol       = "tcp"
   cidr_ipv4         = "10.0.0.0/16"
 }
