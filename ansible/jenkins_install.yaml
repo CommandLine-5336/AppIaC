@@ -1,6 +1,6 @@
 ---
  - name: Install Jenkins
- - hosts: ????????
+   hosts: jenkins
    become: true
    tasks:
     - name: Show the extracted username
