@@ -1,7 +1,6 @@
 ---
  - name: Install Jenkins
-   hosts: jenkins
-   remote_user: ubuntu
+   hosts: all
    become: true
    tasks:
     - name: Show the extracted username

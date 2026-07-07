@@ -4,7 +4,7 @@
 # Jenkins
 resource "aws_instance" "jenkins" {
   ami                         = data.aws_ami.latest_packer_image.id
-  instance_type               = "t3.small"
+  instance_type               = "t3.medium"
   subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
   root_block_device {
