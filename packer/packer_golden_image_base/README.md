@@ -1,17 +1,19 @@
-# Packer image
+# Base packer image
 
 ## Requirements
 * Packer 1.15.4
-* Vagrant 2.4.9
-* AWS CLI Keys `aws configure`
+* AWS-cli 2.31.35
+* Python/3.14.4
+* boto3 1.40.72
+* botocore 1.40.72
+
 
 ## Installing / Getting started
 
 * [Packer](https://developer.hashicorp.com/packer/install) should be installed
-* After installing packer, `cd` into the folder with the pkr.hcl file
 * Inside the folder do `packer init` in bash
 * `packer fmt ./{FILE_NAME.pkr.hcl}` and `packer validate ./{FILE_NAME.pkr.hcl}`
-* `packer build ./{FILE_NAME.pkr.hcl}` inside of bash in order to start building the VM inside of AWS
+* `packer build ./{FILE_NAME.pkr.hcl}` inside of bash in order to start building the AMI in AWS
 
 ## Features
 
