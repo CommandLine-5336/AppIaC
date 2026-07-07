@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User={{ web_user }}
 Group=www-data
-WorkingDirectory={{ web_app_dir }}/BirdWatchingApp
-Environment="PATH={{ web_app_dir }}/BirdWatchingApp/venv/bin"
-ExecStart={{ web_app_dir }}/BirdWatchingApp/venv/bin/gunicorn --bind 0.0.0.0:{{ web_app_port }} app:app
+WorkingDirectory={{ web_app_dir }}/BirdWatchingApp/src
+Environment="PATH={{ web_app_dir }}/BirdWatchingApp/src/venv/bin"
+ExecStart={{ web_app_dir }}/BirdWatchingApp/src/venv/bin/gunicorn --bind 0.0.0.0:{{ web_app_port }} app:app
 
 [Install]
 WantedBy=multi-user.target
