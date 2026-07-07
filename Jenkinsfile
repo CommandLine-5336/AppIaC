@@ -1,10 +1,8 @@
 pipeline {
     agent any
-
     environment {
         ANSIBLE_CONFIG = 'ansible/ansible.cfg'
     }
-
     stages {
         stage('Clone App repo') {
             steps {
@@ -13,7 +11,6 @@ pipeline {
                 }
             }
         }
-
         stage('Consul playbook') {
             steps {
                 ansiblePlaybook(
@@ -23,7 +20,6 @@ pipeline {
                 )
             }
         }
-
         stage('MariaDB playbook') {
             steps {
                 withCredentials([
@@ -50,7 +46,6 @@ pipeline {
                 }
             }
         }
-
         stage('Webserver playbook') {
             steps {
                 withCredentials([
