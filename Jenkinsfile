@@ -1,3 +1,4 @@
+// groovy-lint-disable CompileStatic, DuplicateMapLiteral
 pipeline {
     agent any
     environment {
