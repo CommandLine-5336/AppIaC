@@ -7,6 +7,10 @@ resource "aws_instance" "jenkins" {
   instance_type               = var.instance_type
   subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
 
   vpc_security_group_ids = [aws_security_group.jenkins.id]
   iam_instance_profile   = module.iam_role.instance_profile_name
