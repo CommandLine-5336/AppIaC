@@ -1,0 +1,11 @@
+{
+  "service": {
+    "name": "lb",
+    "port": 80,
+    "tags": ["nginx"],
+    "check": {
+      "http": "http://127.0.0.1:80/",
+      "interval": "10s"
+    }
+  }
+}

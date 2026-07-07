@@ -3,3 +3,8 @@
   ansible.builtin.service:
     name: nginx
     state: restarted
+
+- name: Reload consul
+  ansible.builtin.systemd:
+    name: consul
+    state: reloaded

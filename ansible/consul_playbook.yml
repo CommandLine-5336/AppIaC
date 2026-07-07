@@ -10,18 +10,8 @@
       consul_bootstrap_expect: "{{ groups['consul'] | length }}"
       consul_retry_join: "{{ groups['consul'] | map('extract', hostvars, 'consul_bind_addr') | list }}"
 
-- name: Configure Consul clients on web
-  hosts: web
-  become: yes
-  force_handlers: true
-  roles:
-  - role: consul
-    vars:
-      consul_server: false
-      consul_retry_join: "{{ groups['consul'] | map('extract', hostvars, 'consul_bind_addr') | list }}"
-
-- name: Configure Consul clients on db
-  hosts: db
+- name: Configure Consul Clients
+  hosts: web:db:lb
   become: yes
   force_handlers: true
   roles:
