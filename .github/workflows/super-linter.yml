@@ -99,3 +99,4 @@ jobs:
           VALIDATE_CSS: false
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_HTML: false
+          VALIDATE_GROOVY: false
