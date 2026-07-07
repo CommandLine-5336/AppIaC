@@ -43,18 +43,18 @@ module "jenkins_sg" {
       description = "Jenkins from internal"
     },
     {
-        description                  = "All traffic from members of this SG"
-        ip_protocol                  = "-1"
-        referenced_security_group_id = module.jenkins_sg.id
+      description                  = "All traffic from members of this SG"
+      ip_protocol                  = "-1"
+      referenced_security_group_id = module.jenkins_sg.id
     }
   ]
 
-    egress_rules = [
-      {
-        ip_protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ]
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
   tags = {
     Environment = "Dev"
@@ -84,25 +84,25 @@ module "lb_sg" {
       description = "HTTP from internet"
     },
     {
-      from_port   = 22
-      to_port     = 22
-      ip_protocol = "tcp"
+      from_port                    = 22
+      to_port                      = 22
+      ip_protocol                  = "tcp"
       referenced_security_group_id = module.jenkins_sg.id
-      description = "SSH from jenkins"
+      description                  = "SSH from jenkins"
     },
     {
-        description                  = "All traffic from members of this SG"
-        ip_protocol                  = "-1"
-        referenced_security_group_id = module.lb_sg.id
+      description                  = "All traffic from members of this SG"
+      ip_protocol                  = "-1"
+      referenced_security_group_id = module.lb_sg.id
     }
   ]
 
-    egress_rules = [
-      {
-        ip_protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ]
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
   tags = {
     Environment = "Dev"
@@ -125,25 +125,25 @@ module "web_sg" {
       description = "HTTP from internal"
     },
     {
-      from_port   = 22
-      to_port     = 22
-      ip_protocol = "tcp"
+      from_port                    = 22
+      to_port                      = 22
+      ip_protocol                  = "tcp"
       referenced_security_group_id = module.jenkins_sg.id
-      description = "SSH from jenkins"
+      description                  = "SSH from jenkins"
     },
     {
-        description                  = "All traffic from members of this SG"
-        ip_protocol                  = "-1"
-        referenced_security_group_id = module.web_sg.id
+      description                  = "All traffic from members of this SG"
+      ip_protocol                  = "-1"
+      referenced_security_group_id = module.web_sg.id
     }
   ]
 
-    egress_rules = [
-      {
-        ip_protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ]
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
   tags = {
     Environment = "Dev"
@@ -159,32 +159,32 @@ module "db_sg" {
 
   ingress_rules = [
     {
-      from_port   = 3306
-      to_port     = 3306
-      ip_protocol = "tcp"
+      from_port                    = 3306
+      to_port                      = 3306
+      ip_protocol                  = "tcp"
       referenced_security_group_id = module.web_sg.id
-      description = "MariaDB from web"
+      description                  = "MariaDB from web"
     },
     {
-      from_port   = 22
-      to_port     = 22
-      ip_protocol = "tcp"
+      from_port                    = 22
+      to_port                      = 22
+      ip_protocol                  = "tcp"
       referenced_security_group_id = module.jenkins_sg.id
-      description = "SSH from jenkins"
+      description                  = "SSH from jenkins"
     },
     {
-        description                  = "All traffic from members of this SG"
-        ip_protocol                  = "-1"
-        referenced_security_group_id = module.db_sg.id
+      description                  = "All traffic from members of this SG"
+      ip_protocol                  = "-1"
+      referenced_security_group_id = module.db_sg.id
     }
   ]
 
-    egress_rules = [
-      {
-        ip_protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ]
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
 
   tags = {
@@ -199,7 +199,7 @@ module "consul_sg" {
   description = "Security group for consul servers"
   vpc_id      = module.vpc.id
 
- ingress_rules = [
+  ingress_rules = [
     {
       from_port   = 8500
       to_port     = 8500
@@ -222,25 +222,25 @@ module "consul_sg" {
       description = "Consul HTTP"
     },
     {
-      from_port   = 22
-      to_port     = 22
-      ip_protocol = "tcp"
+      from_port                    = 22
+      to_port                      = 22
+      ip_protocol                  = "tcp"
       referenced_security_group_id = module.jenkins_sg.id
-      description = "SSH from jenkins"
+      description                  = "SSH from jenkins"
     },
     {
-        description                  = "All traffic from members of this SG"
-        ip_protocol                  = "-1"
-        referenced_security_group_id = module.consul_sg.id
+      description                  = "All traffic from members of this SG"
+      ip_protocol                  = "-1"
+      referenced_security_group_id = module.consul_sg.id
     }
   ]
 
-    egress_rules = [
-      {
-        ip_protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-    ]
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
 
 
   tags = {

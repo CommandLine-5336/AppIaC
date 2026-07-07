@@ -1,17 +1,17 @@
 variable "name" {
-    type    = string
+  type = string
 }
 
 variable "env" {
-    default = "Dev"
+  default = "Dev"
 }
 
 variable "description" {
-    type    = string
+  type = string
 }
 
 variable "vpc_id" {
-    type    = string
+  type = string
 }
 
 variable "tags" {

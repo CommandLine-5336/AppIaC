@@ -62,8 +62,8 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_eip" "nat_eip" {
-  count      = length(var.private_subnet_cidrs)
-  domain     = "vpc"
+  count  = length(var.private_subnet_cidrs)
+  domain = "vpc"
   tags = {
     Name        = "${var.env}-nat-gw-eip-${count.index}"
     Environment = "${var.env}"
@@ -71,7 +71,7 @@ resource "aws_eip" "nat_eip" {
 }
 
 resource "aws_nat_gateway" "nat" {
-  count      = length(var.public_subnet_cidrs)
+  count         = length(var.public_subnet_cidrs)
   allocation_id = aws_eip.nat_eip[count.index].id
   subnet_id     = aws_subnet.public_subnet[count.index].id
   tags = {
@@ -119,9 +119,9 @@ resource "aws_vpc_endpoint" "s3" {
   service_name      = "com.amazonaws.${var.region}.s3"
   vpc_endpoint_type = "Gateway"
 
-  route_table_ids   = concat(
-      [aws_route_table.public_rt.id],
-      aws_route_table.private_rt[*].id
+  route_table_ids = concat(
+    [aws_route_table.public_rt.id],
+    aws_route_table.private_rt[*].id
   )
 
   tags = {

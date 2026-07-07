@@ -1,15 +1,15 @@
 variable "name" {
-    type    = string
+  type = string
 }
 
 variable "env" {
-    default = "Dev"
+  default = "Dev"
 }
 
 variable "caller_identity" {
-    default = "704427427594"
+  default = "704427427594"
 }
 
 variable "region" {
-    default = "us-east-1"
+  default = "us-east-1"
 }

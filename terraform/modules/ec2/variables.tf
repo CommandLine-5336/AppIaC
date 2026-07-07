@@ -27,13 +27,13 @@ variable "profile_name" {
 variable "assoc_pub_ip" {
   description = "Will public ip-adress be associated"
   type        = bool
-  default = false
+  default     = false
 }
 
 variable "pub_ip" {
   description = "Public ip-adress if it is associated"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "subnet_id" {
