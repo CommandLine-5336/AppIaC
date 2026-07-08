@@ -3,7 +3,7 @@ regions:
   - us-east-1
 
 hostnames:
-  - instance-id
+  - private-ip-address
 
 use_contrib_script_compatible_sanitization: True
 use_contrib_script_compatible_ec2_tag_keys: True
@@ -14,6 +14,7 @@ filters:
 
 compose:
   ansible_host: private_ip_address
+  ansible_user: "ubuntu"
 
 keyed_groups:
   - key: tags.Role
