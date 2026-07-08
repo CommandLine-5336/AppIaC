@@ -8,6 +8,7 @@ terraform {
   }
 }
 
+
 resource "aws_security_group" "this" {
   name_prefix = "${var.name}-"
   description = var.description
@@ -32,7 +33,7 @@ locals {
 
   ingress_security_group_rules = flatten([
     for rule_index, rule in var.ingress_rules : [
-      for sg_index, sg_id in rule.security_groups : merge(rule, {
+      for sg_index, sg_id in rule.referenced_security_group_id : merge(rule, {
         key                          = "${rule_index}-sg-${sg_index}"
         referenced_security_group_id = sg_id
       })
@@ -71,6 +72,13 @@ resource "aws_vpc_security_group_ingress_rule" "security_group" {
   to_port                      = each.value.to_port
   ip_protocol                  = each.value.ip_protocol
   description                  = each.value.description
+}
+
+resource "aws_vpc_security_group_ingress_rule" "self" {
+  security_group_id            = aws_security_group.this.id
+  referenced_security_group_id = aws_security_group.this.id
+  ip_protocol                  = "-1"
+  description                  = "All traffic from members of this SG"
 }
 
 resource "aws_vpc_security_group_egress_rule" "out" {

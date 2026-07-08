@@ -41,11 +41,6 @@ module "jenkins_sg" {
       ip_protocol = "tcp"
       cidr_blocks = ["10.0.1.0/24"]
       description = "Jenkins from internal"
-    },
-    {
-      description                  = "All traffic from members of this SG"
-      ip_protocol                  = "-1"
-      referenced_security_group_id = module.jenkins_sg.id
     }
   ]
 
@@ -87,13 +82,8 @@ module "lb_sg" {
       from_port                    = 22
       to_port                      = 22
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.jenkins_sg.id
+      referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
-    },
-    {
-      description                  = "All traffic from members of this SG"
-      ip_protocol                  = "-1"
-      referenced_security_group_id = module.lb_sg.id
     }
   ]
 
@@ -128,13 +118,8 @@ module "web_sg" {
       from_port                    = 22
       to_port                      = 22
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.jenkins_sg.id
+      referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
-    },
-    {
-      description                  = "All traffic from members of this SG"
-      ip_protocol                  = "-1"
-      referenced_security_group_id = module.web_sg.id
     }
   ]
 
@@ -162,20 +147,15 @@ module "db_sg" {
       from_port                    = 3306
       to_port                      = 3306
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.web_sg.id
+      referenced_security_group_id = [module.web_sg.id]
       description                  = "MariaDB from web"
     },
     {
       from_port                    = 22
       to_port                      = 22
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.jenkins_sg.id
+      referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
-    },
-    {
-      description                  = "All traffic from members of this SG"
-      ip_protocol                  = "-1"
-      referenced_security_group_id = module.db_sg.id
     }
   ]
 
@@ -225,13 +205,8 @@ module "consul_sg" {
       from_port                    = 22
       to_port                      = 22
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.jenkins_sg.id
+      referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
-    },
-    {
-      description                  = "All traffic from members of this SG"
-      ip_protocol                  = "-1"
-      referenced_security_group_id = module.consul_sg.id
     }
   ]
 
