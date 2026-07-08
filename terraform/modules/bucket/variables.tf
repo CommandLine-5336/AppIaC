@@ -3,16 +3,16 @@ variable "name" {
 }
 
 variable "env" {
-  type = string
+  type    = string
   default = "Dev"
 }
 
 variable "caller_identity" {
-  type = string
+  type    = string
   default = "704427427594"
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "us-east-1"
 }

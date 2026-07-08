@@ -76,7 +76,7 @@ resource "aws_eip" "nat_eip" {
   domain = "vpc"
   tags = {
     Name        = "${var.env}-nat-gw-eip-${count.index}"
-    Environment = "${var.env}"
+    Environment = var.env
   }
 }
 
@@ -86,7 +86,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public_subnet[count.index].id
   tags = {
     Name        = "${var.env}-nat-gw-${count.index}"
-    Environment = "${var.env}"
+    Environment = var.env
   }
 }
 
