@@ -1,14 +1,14 @@
 ---
+- name: Create consul-template user
+  ansible.builtin.user:
+    name: consul-template
+    system: yes
+
 - name: Allow nginx reload via sudo
   ansible.builtin.copy:
     dest: /etc/sudoers.d/consul-template-nginx
     content: "{{ lb_user }} ALL=(root) NOPASSWD: /usr/bin/systemctl reload nginx\n"
     mode: '0440'
-
-- name: Create consul-template user
-  ansible.builtin.user:
-    name: consul-template
-    system: yes
 
 - name: Create consul-template config dir
   ansible.builtin.file:
