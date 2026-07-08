@@ -8,3 +8,8 @@
   ansible.builtin.systemd:
     name: consul
     state: reloaded
+
+- name: Restart Datadog
+  ansible.builtin.service:
+    name: datadog-agent
+    state: restarted
