@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "this" {
     Environment = var.env
     Owner       = "CommandLine"
   }
-#   lifecycle {
-#     prevent_destroy = true
-#   }
+  lifecycle {
+    prevent_destroy = true
+  }
 }
