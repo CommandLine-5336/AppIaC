@@ -3,5 +3,5 @@
   ansible.builtin.lineinfile:
     path: /etc/datadog-agent/datadog.yaml
     regexp: '^hostname:'
-    line: "hostname: Jenkins-{{ ansible_hostname }}"
+    line: "hostname: {{ ansible_hostname }}"
   notify: Restart Datadog
