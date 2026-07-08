@@ -5,3 +5,8 @@
     state: restarted
     enabled: yes
     daemon_reload: yes
+
+- name: Restart Datadog
+  ansible.builtin.service:
+    name: datadog-agent
+    state: restarted

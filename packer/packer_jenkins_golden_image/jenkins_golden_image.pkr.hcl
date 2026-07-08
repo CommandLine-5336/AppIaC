@@ -11,17 +11,17 @@ packer {
   }
 }
 source "amazon-ebs" "ubuntu-golden-image" {
-  ami_name      = "packer-ubuntu-golden-image-{{timestamp}}"
+  ami_name      = "jenkins-ubuntu-golden-image-{{timestamp}}"
   instance_type = "t3.small"
   region        = "us-east-1"
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-resolute-26.04-amd64-server-20260604"
+      name                = "packer-ubuntu-golden-image-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["099720109477"]
+    owners      = ["704427427594"]
   }
   ssh_username = "ubuntu"
   temporary_iam_instance_profile_policy_document {
@@ -31,13 +31,34 @@ source "amazon-ebs" "ubuntu-golden-image" {
       Action   = ["s3:PutObject"]
       Resource = ["arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*"]
     }
+    Statement {
+      Effect = "Allow"
+      Action = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ]
+      Resource = ["arn:aws:secretsmanager:*:*:secret:*"]
+    }
+    Statement {
+      Effect = "Allow"
+      Action = [
+        "secretsmanager:BatchGetSecretValue",
+        "secretsmanager:ListSecrets"
+      ]
+      Resource = ["*"]
+    }
+    Statement {
+      Effect   = "Allow"
+      Action   = ["kms:Decrypt"]
+      Resource = ["arn:aws:kms:*:*:key/*"]
+    }
   }
 }
 
 build {
   sources = ["source.amazon-ebs.ubuntu-golden-image"]
   provisioner "ansible" {
-    playbook_file   = "./packer_playbook.yaml"
-    galaxy_file     = "./requirements.yaml"
+    playbook_file = "./jenkins_install.yaml"
+    galaxy_file   = "./requirements.yaml"
   }
 }
