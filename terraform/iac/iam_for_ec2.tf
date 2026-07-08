@@ -21,9 +21,9 @@ module "ec2_role" {
             "s3:DeleteObject"
           ]
           Resource = [
-              format("arn:aws:s3:::images-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
-              format("arn:aws:s3:::security-scan-bucket-%s-%s-%s/*",var.environment, var.caller_id, var.region),
-              format("arn:aws:s3:::jenkins-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::images-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::security-scan-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
           ]
         },
         {
@@ -33,9 +33,9 @@ module "ec2_role" {
             "s3:ListBucket"
           ]
           Resource = [
-            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s",var.environment, var.caller_id, var.region),
-            format("arn:aws:s3:::security-scan-bucket-%s-%s-%s",var.environment, var.caller_id, var.region),
-            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s",var.environment, var.caller_id, var.region)
+            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s", var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::security-scan-bucket-%s-%s-%s", var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s", var.environment, var.caller_id, var.region)
           ]
         },
         {

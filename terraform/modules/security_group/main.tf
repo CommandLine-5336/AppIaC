@@ -1,3 +1,13 @@
+terraform {
+  required_version = "1.15.7"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.52.0"
+    }
+  }
+}
+
 resource "aws_security_group" "this" {
   name_prefix = "${var.name}-"
   description = var.description
@@ -34,15 +44,6 @@ locals {
       for cidr_index, cidr in rule.cidr_blocks : merge(rule, {
         key       = "${rule_index}-cidr-${cidr_index}"
         cidr_ipv4 = cidr
-      })
-    ]
-  ])
-
-  egress_security_group_rules = flatten([
-    for rule_index, rule in var.egress_rules : [
-      for sg_index, sg_id in rule.security_groups : merge(rule, {
-        key                          = "${rule_index}-sg-${sg_index}"
-        referenced_security_group_id = sg_id
       })
     ]
   ])

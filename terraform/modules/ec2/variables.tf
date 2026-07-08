@@ -1,4 +1,4 @@
-variable "ami"{
+variable "ami" {
   description = "Ami for EC2"
   type        = string
 }

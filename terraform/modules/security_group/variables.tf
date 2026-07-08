@@ -3,6 +3,7 @@ variable "name" {
 }
 
 variable "env" {
+  type = string
   default = "Dev"
 }
 

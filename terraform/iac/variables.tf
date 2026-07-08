@@ -6,15 +6,15 @@ variable "secret_access_key" {
 }
 
 variable "environment" {
-  type        = string
-  default     = "dev"
+  type    = string
+  default = "dev"
 }
 
 variable "region" {
-  type        = string
-  default     = "us-east-1"
+  type    = string
+  default = "us-east-1"
 }
 
 variable "caller_id" {
-  type        = string
+  type = string
 }

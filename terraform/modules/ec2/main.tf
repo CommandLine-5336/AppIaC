@@ -1,3 +1,13 @@
+terraform {
+  required_version = "1.15.7"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.52.0"
+    }
+  }
+}
+
 resource "aws_instance" "this" {
   ami                         = var.ami
   instance_type               = var.instance_type
@@ -9,12 +19,12 @@ resource "aws_instance" "this" {
   iam_instance_profile   = var.profile_name
 
   root_block_device {
-      volume_size = var.volume_size
+    volume_size = var.volume_size
   }
 
   tags = {
-    Name        = "${var.name}"
-    Role        = "${var.role}"
-    Environment = "${var.env}"
+    Name        = var.name
+    Role        = var.role
+    Environment = var.env
   }
 }
