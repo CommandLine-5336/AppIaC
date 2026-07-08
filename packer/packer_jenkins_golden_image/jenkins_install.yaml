@@ -72,3 +72,13 @@
       ansible.builtin.service:
         name: jenkins
         state: restarted
+    - name: Install ansible
+      ansible.builtin.apt:
+        name: ansible
+        state: present
+    - name: Install collections necessary for jenkins job execution
+      ansible.builtin.shell: |
+        ansible-galaxy collection install {{ item }}
+      loop:
+        - amazon.aws
+        - ansible.mysql
