@@ -37,7 +37,7 @@ source "amazon-ebs" "ubuntu-golden-image" {
 build {
   sources = ["source.amazon-ebs.ubuntu-golden-image"]
   provisioner "ansible" {
-    playbook_file   = "./packer_playbook.yaml"
-    galaxy_file     = "./requirements.yaml"
+    playbook_file = "./packer_playbook.yaml"
+    galaxy_file   = "./requirements.yaml"
   }
 }
