@@ -45,7 +45,7 @@
 
 - name: Install consul-template binary
   ansible.builtin.unarchive:
-    src: "{{ consul_template_url }}"
+    src: "{{ lb_consul_template_url }}"
     dest: /usr/local/bin
     remote_src: yes
     mode: '0755'

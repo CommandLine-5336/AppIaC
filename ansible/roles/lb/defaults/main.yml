@@ -1,7 +1,7 @@
 lb_consul_config_dir: /etc/consul.d
 lb_user: consul-template
 lb_group: consul-template
-consul_template_version: "0.41.4"
-consul_template_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
-consul_template_zip: "consul-template_{{ consul_template_version }}_linux_{{ consul_template_arch }}.zip"
-consul_template_url: "https://releases.hashicorp.com/consul-template/{{ consul_template_version }}/{{ consul_template_zip }}"
+lb_consul_template_version: "0.41.4"
+lb_consul_template_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+lb_consul_template_zip: "consul-template_{{ lb_consul_template_version }}_linux_{{ lb_consul_template_arch }}.zip"
+lb_consul_template_url: "https://releases.hashicorp.com/consul-template/{{ lb_consul_template_version }}/{{ lb_consul_template_zip }}"
