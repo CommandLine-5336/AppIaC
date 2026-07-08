@@ -16,7 +16,7 @@ source "amazon-ebs" "ubuntu-golden-image" {
   region        = "us-east-1"
   source_ami_filter {
     filters = {
-      name                = "packer-ubuntu-golden-image-1782997115"
+      name                = "packer-ubuntu-golden-image-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
