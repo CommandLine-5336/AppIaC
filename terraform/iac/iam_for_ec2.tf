@@ -21,9 +21,9 @@ module "ec2_role" {
             "s3:DeleteObject"
           ]
           Resource = [
-            "arn:aws:s3:::images-bucket-704427427594-us-east-1/*",
-            "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1/*",
-            "arn:aws:s3:::jenkins-bucket-704427427594-us-east-1/*"
+              format("arn:aws:s3:::images-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
+              format("arn:aws:s3:::security-scan-bucket-%s-%s-%s/*",var.environment, var.caller_id, var.region),
+              format("arn:aws:s3:::jenkins-bucket-%s-%s-%s/*", var.environment, var.caller_id, var.region),
           ]
         },
         {
@@ -33,9 +33,9 @@ module "ec2_role" {
             "s3:ListBucket"
           ]
           Resource = [
-            "arn:aws:s3:::images-bucket-704427427594-us-east-1",
-            "arn:aws:s3:::security-scan-bucket-704427427594-us-east-1",
-            "arn:aws:s3:::jenkins-bucket-704427427594-us-east-1"
+            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s",var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::security-scan-bucket-%s-%s-%s",var.environment, var.caller_id, var.region),
+            format("arn:aws:s3:::jenkins-bucket-%s-%s-%s",var.environment, var.caller_id, var.region)
           ]
         },
         {
@@ -62,7 +62,7 @@ module "ec2_role" {
             "secretsmanager:GetSecretValue",
             "secretsmanager:DescribeSecret"
           ]
-          Resource = ["arn:aws:secretsmanager:us-east-1:704427427594:secret:DatadogAgent/Production-*"]
+          Resource = [format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id)]
         }
       ]
     })
@@ -71,6 +71,6 @@ module "ec2_role" {
   create_instance_profile = true
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }

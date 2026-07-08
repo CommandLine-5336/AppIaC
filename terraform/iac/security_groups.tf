@@ -23,7 +23,7 @@ module "ssm_sg" {
   ]
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }
 
@@ -57,7 +57,7 @@ module "jenkins_sg" {
   ]
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }
 
@@ -105,7 +105,7 @@ module "lb_sg" {
   ]
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }
 
@@ -146,7 +146,7 @@ module "web_sg" {
   ]
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }
 
@@ -188,7 +188,7 @@ module "db_sg" {
 
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }
 
@@ -244,6 +244,6 @@ module "consul_sg" {
 
 
   tags = {
-    Environment = "Dev"
+    Environment = var.environment
   }
 }

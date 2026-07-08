@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  bucket = format("%s-bucket-%s-%s", var.name, var.caller_identity, var.region)
+  bucket = format("%s-bucket-%s-%s-%s", var.name, var.env, var.caller_identity, var.region)
   tags = {
     Name        = "${var.name}"
     Environment = "${var.env}"

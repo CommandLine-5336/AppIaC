@@ -1,3 +1,8 @@
+variable "ami"{
+  description = "Ami for EC2"
+  type        = string
+}
+
 variable "name" {
   description = "Name of the EC2"
   type        = string
@@ -17,6 +22,12 @@ variable "instance_type" {
   description = "EC2 instance type"
   type        = string
   default     = "t3.micro"
+}
+
+variable "volume_size" {
+  description = "EC2 volume size"
+  type        = number
+  default     = 8
 }
 
 variable "profile_name" {

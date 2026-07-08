@@ -1,10 +1,3 @@
-variable "access_key_id" {
-  type = string
-}
-variable "secret_access_key" {
-  type = string
-}
-
 terraform {
   required_version = "1.15.7"
   required_providers {
@@ -16,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region     = "us-east-1"
+  region     = var.region
   access_key = var.access_key_id
   secret_key = var.secret_access_key
 }

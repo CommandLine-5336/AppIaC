@@ -1,5 +1,5 @@
 resource "aws_instance" "this" {
-  ami                         = data.aws_ami.latest_packer_image.id
+  ami                         = var.ami
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
   associate_public_ip_address = var.assoc_pub_ip
@@ -7,6 +7,10 @@ resource "aws_instance" "this" {
 
   vpc_security_group_ids = var.sg_id
   iam_instance_profile   = var.profile_name
+
+  root_block_device {
+      volume_size = var.volume_size
+  }
 
   tags = {
     Name        = "${var.name}"
