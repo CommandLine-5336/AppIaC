@@ -65,17 +65,15 @@
    - name: Run trivy scan regularly
      ansible.builtin.cron:
        name: "Run trivy scan"
-       minute: "0"
-       hour: "1"
+       minute: "*"
+       hour: "*/2"
        user: root
        job: >
-         trivy fs
-         --severity HIGH,CRITICAL
-         --timeout 10m
-         --format table
-         --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).txt"
-         / &&
-         aws s3 cp "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).txt" "s3://security-scan-bucket-704427427594-us-east-1/"
+        sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json \
+        --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd \
+        --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%\Y%m\%d_\%H\%M).json" /
+        &&
+        aws s3 cp "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).json" "s3://security-scan-bucket-704427427594-us-east-1/"
    - name: Add ssh keys for the entire team
      ansible.posix.authorized_key:
        user: "{{ item.user }}"
