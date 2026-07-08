@@ -23,8 +23,14 @@ Thumbs.db
 *.swo
 
 
-terraform/.terraform
-terraform/.terraform.lock.hcl
-terraform/terraform.tfstate.backup
-terraform/terraform.tfstate
-terraform/terraform.tfvars
+terraform/iac/.terraform
+terraform/iac/.terraform.lock.hcl
+terraform/iac/terraform.tfstate.backup
+terraform/iac/terraform.tfstate
+terraform/iac/terraform.tfvars
+
+terraform/state_bucket/.terraform
+terraform/state_bucket/.terraform.lock.hcl
+terraform/state_bucket/terraform.tfstate.backup
+terraform/state_bucket/terraform.tfstate
+terraform/state_bucket/terraform.tfvars
