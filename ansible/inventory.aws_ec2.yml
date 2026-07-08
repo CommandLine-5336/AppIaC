@@ -10,14 +10,10 @@ use_contrib_script_compatible_ec2_tag_keys: True
 
 filters:
   instance-state-name: running
-  "tag:Environment": Dev
+  tag:Environment: Dev
 
 compose:
-  ansible_host: public_ip_address
-  ansible_user: "'ubuntu'"
-  ansible_ssh_private_key_file: "/home/derankatinum/.ssh/vagrant_key"
-  ansible_connection: "ssh"
-  ansible_ssh_common_args: "'-o StrictHostKeyChecking=no'"
+  ansible_host: private_ip_address
 
 keyed_groups:
   - key: tags.Role

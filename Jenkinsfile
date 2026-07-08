@@ -1,16 +1,19 @@
 pipeline {
     agent any
+
     environment {
         ANSIBLE_CONFIG = 'ansible/ansible.cfg'
     }
+
     stages {
         stage('Clone App repo') {
             steps {
                 dir('BirdWatchingApp') {
-                    git(url: 'https://github.com/CommandLine-5336/BirdWatchingApp.git', branch: 'main')
+                    git(url: 'https://github.com/CommandLine-5336/BirdWatchingApp.git', branch: 'fix/CL-132-Adapt-BirdWatching-code-to-work-on-EC2')
                 }
             }
         }
+
         stage('Consul playbook') {
             steps {
                 ansiblePlaybook(
@@ -20,6 +23,7 @@ pipeline {
                 )
             }
         }
+
         stage('MariaDB playbook') {
             steps {
                 withCredentials([
@@ -46,6 +50,7 @@ pipeline {
                 }
             }
         }
+
         stage('Webserver playbook') {
             steps {
                 withCredentials([
@@ -62,21 +67,25 @@ pipeline {
                         credentialsId: 'flask_secret_key',
                         variable: 'SECRET_KEY'
                     ),
-                    string(
-                        credentialsId: 'app_s3_endpoint',
-                        variable: 'S3_ENDPOINT'
-                    ),
-                    string(
-                        credentialsId: 'app_s3_access_key',
-                        variable: 'S3_ACCESS_KEY'
-                    ),
-                    string(
-                        credentialsId: 'app_s3_secret_key',
-                        variable: 'S3_SECRET_KEY'
-                    ),
+                    // string(
+                    //     credentialsId: 'app_s3_endpoint',
+                    //     variable: 'S3_ENDPOINT'
+                    // ),
+                    // string(
+                    //     credentialsId: 'app_s3_access_key',
+                    //     variable: 'S3_ACCESS_KEY'
+                    // ),
+                    // string(
+                    //     credentialsId: 'app_s3_secret_key',
+                    //     variable: 'S3_SECRET_KEY'
+                    // ),
                     string(
                         credentialsId: 'app_s3_bucket',
                         variable: 'S3_BUCKET'
+                    ),
+                    string(
+                        credentialsId: 'app_s3_region',
+                        variable: 'S3_REGION'
                     )
                 ]) {
                     ansiblePlaybook(
@@ -86,10 +95,11 @@ pipeline {
                             db_user: "$DB_USER",
                             db_password: "$DB_PASSWORD",
                             secret_key: "$SECRET_KEY",
-                            s3_endpoint: "$S3_ENDPOINT",
-                            s3_access_key: "$S3_ACCESS_KEY",
-                            s3_secret_key: "$S3_SECRET_KEY",
-                            s3_bucket: "$S3_BUCKET"
+                            // s3_endpoint: "$S3_ENDPOINT",
+                            // s3_access_key: "$S3_ACCESS_KEY",
+                            // s3_secret_key: "$S3_SECRET_KEY",
+                            s3_bucket: "$S3_BUCKET",
+                            s3_region: "$S3_REGION"
                         ],
                         installation: 'Ansible',
                         playbook: 'ansible/app_playbook.yml'
