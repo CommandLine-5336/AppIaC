@@ -14,7 +14,7 @@
     domain: birdwatching.com
     www_domain: www.birdwatching.com
     email: commandlline@gmail.com
-    secret_name: "birdwatching/ssl_certs"
+    webroot: /var/www/html
   tasks:
     - name: Ensure Nginx is running
       ansible.builtin.service:
