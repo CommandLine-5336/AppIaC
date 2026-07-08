@@ -3,7 +3,6 @@ regions:
   - us-east-1
 
 hostnames:
-  - private-ip-address
   - instance-id
 
 use_contrib_script_compatible_sanitization: True
