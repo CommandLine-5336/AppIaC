@@ -63,6 +63,14 @@ module "ec2_role" {
             "secretsmanager:DescribeSecret"
           ]
           Resource = [format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id)]
+        },
+        {
+            Sid    = "DescribeEC2"
+            Effect = "Allow"
+            Action = [
+                "ec2:DescribeInstances"
+            ]
+            Resource = ["*"]
         }
       ]
     })
