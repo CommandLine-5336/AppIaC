@@ -16,11 +16,21 @@ pipeline {
 
         stage('Consul playbook') {
             steps {
-                ansiblePlaybook(
-                    credentialsId: 'vm_ssh_key',
-                    installation: "Ansible",
-                    playbook: 'ansible/consul_playbook.yml'
-                )
+                withCredentials([
+                    string(
+                        credentialsId: 'gossip_key',
+                        variable: 'GOSSIP_KEY'
+                    )
+                ]) {
+                    ansiblePlaybook(
+                        credentialsId: 'vm_ssh_key',
+                        extraVars: [
+                            consul_gossip_key: "$GOSSIP_KEY"
+                        ],
+                        installation: "Ansible",
+                        playbook: 'ansible/consul_playbook.yml'
+                    )
+                }
             }
         }
 
@@ -67,18 +77,6 @@ pipeline {
                         credentialsId: 'flask_secret_key',
                         variable: 'SECRET_KEY'
                     ),
-                    // string(
-                    //     credentialsId: 'app_s3_endpoint',
-                    //     variable: 'S3_ENDPOINT'
-                    // ),
-                    // string(
-                    //     credentialsId: 'app_s3_access_key',
-                    //     variable: 'S3_ACCESS_KEY'
-                    // ),
-                    // string(
-                    //     credentialsId: 'app_s3_secret_key',
-                    //     variable: 'S3_SECRET_KEY'
-                    // ),
                     string(
                         credentialsId: 'app_s3_bucket',
                         variable: 'S3_BUCKET'
@@ -95,9 +93,6 @@ pipeline {
                             db_user: "$DB_USER",
                             db_password: "$DB_PASSWORD",
                             secret_key: "$SECRET_KEY",
-                            // s3_endpoint: "$S3_ENDPOINT",
-                            // s3_access_key: "$S3_ACCESS_KEY",
-                            // s3_secret_key: "$S3_SECRET_KEY",
                             s3_bucket: "$S3_BUCKET",
                             s3_region: "$S3_REGION"
                         ],
