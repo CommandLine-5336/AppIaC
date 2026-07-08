@@ -1,0 +1,61 @@
+---
+- name: Lookup secretsmanager secret in the current region
+  ansible.builtin.debug: msg="{{ lookup('amazon.aws.aws_secret', '/path/to/secrets', bypath=true) }}"
+
+- name: Check if ssl exists
+    lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs')
+
+
+---
+- name: Request Let's Encrypt certificate for Nginx
+  hosts: webservers
+  become: true
+  vars:
+    domain: birdwatching.com
+    www_domain: www.birdwatching.com
+    email: commandlline@gmail.com
+    secret_name: "birdwatching/ssl_certs"
+  tasks:
+    - name: Ensure Nginx is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+
+    - name: Check if certificate already exists
+      ansible.builtin.stat:
+        path: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+      register: cert_file
+
+    - name: Request certificate using certbot nginx plugin
+      ansible.builtin.command: >
+        certbot certonly
+        --nginx
+        --non-interactive
+        --agree-tos
+        --email {{ email }}
+        -d {{ domain }}
+        -d {{ www_domain }}
+      when: not cert_file.stat.exists
+      register: certbot_result
+      changed_when: "'Successfully received certificate' in certbot_result.stdout"
+      notify: Reload Nginx
+
+    - name: Deploy Nginx SSL configuration
+      ansible.builtin.template:
+        src: templates/nginx-ssl-letsencrypt.conf.j2
+        dest: /etc/nginx/sites-available/{{ domain }}.conf
+        mode: '0644'
+      notify: Reload Nginx
+
+    - name: Enable site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/{{ domain }}.conf
+        dest: /etc/nginx/sites-enabled/{{ domain }}.conf
+        state: link
+      notify: Reload Nginx
+
+  handlers:
+    - name: Reload Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
