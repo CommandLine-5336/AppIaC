@@ -3,6 +3,7 @@ regions:
   - us-east-1
 
 hostnames:
+  - private-ip-address
   - instance-id
 
 use_contrib_script_compatible_sanitization: True
@@ -10,7 +11,7 @@ use_contrib_script_compatible_ec2_tag_keys: True
 
 filters:
   instance-state-name: running
-  tag:Environment: Dev
+  tag:Environment: dev
 
 compose:
   ansible_host: private_ip_address
