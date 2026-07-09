@@ -108,18 +108,18 @@ module "web_sg" {
 
   ingress_rules = [
     {
-      from_port   = 80
-      to_port     = 80
-      ip_protocol = "tcp"
+      from_port                    = 80
+      to_port                      = 80
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.lb_sg.id]
-      description = "HTTP from lb"
+      description                  = "HTTP from lb"
     },
     {
-      from_port   = 443
-      to_port     = 443
-      ip_protocol = "tcp"
+      from_port                    = 443
+      to_port                      = 443
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.lb_sg.id]
-      description = "HTTPS from lb"
+      description                  = "HTTPS from lb"
     },
     {
       from_port                    = 22
