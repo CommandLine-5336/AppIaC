@@ -6,8 +6,8 @@ Wants=network-online.target
 [Service]
 ExecStart=/usr/local/bin/consul-template -config=/etc/consul-template.d/config.hcl
 Restart=on-failure
-User={{ lb_user }}
-Group={{ lb_group }}
+User=root
+Group=root
 
 [Install]
 WantedBy=multi-user.target
