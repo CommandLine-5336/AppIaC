@@ -23,12 +23,12 @@ variable "tags" {
 variable "ingress_rules" {
   description = "List of ingress rules"
   type = list(object({
-    from_port       = optional(number)
-    to_port         = optional(number)
-    ip_protocol     = string
-    cidr_blocks     = optional(list(string), [])
-    security_groups = optional(list(string), [])
-    description     = optional(string, "")
+    from_port                    = optional(number)
+    to_port                      = optional(number)
+    ip_protocol                  = string
+    cidr_blocks                  = optional(list(string), [])
+    referenced_security_group_id = optional(list(string), [])
+    description                  = optional(string, "")
   }))
   default = []
 }
@@ -36,12 +36,11 @@ variable "ingress_rules" {
 variable "egress_rules" {
   description = "List of egress rules"
   type = list(object({
-    from_port       = optional(number)
-    to_port         = optional(number)
-    ip_protocol     = string
-    cidr_blocks     = optional(list(string), [])
-    security_groups = optional(list(string), [])
-    description     = optional(string, "")
+    from_port   = optional(number)
+    to_port     = optional(number)
+    ip_protocol = string
+    cidr_blocks = optional(list(string), [])
+    description = optional(string, "")
   }))
   default = [{
     ip_protocol = "-1"
