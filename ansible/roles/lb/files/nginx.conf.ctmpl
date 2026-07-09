@@ -10,7 +10,14 @@ server {
 
     server_name birdwatching.com www.birdwatching.com;
 
-    return 301 https://$host$request_uri;
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+        allow all;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
 }
 
 server {
