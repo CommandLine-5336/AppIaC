@@ -73,7 +73,7 @@
         bucket=$(aws s3 ls | awk '/security/ {print $3; exit}');
         sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json \
         --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd \
-        --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%\Y%m\%d_\%H\%M).json" /
+        --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).json" /
         &&
         aws s3 cp "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).json" "s3://$bucket/"
    - name: Add ssh keys for the entire team
@@ -87,9 +87,29 @@
        - {user: ubuntu, key: "{{ lookup('file', './maksym.pub') }}"}
        - {user: ubuntu, key: "{{ lookup('file', './marta.pub') }}"}
        - {user: ubuntu, key: "{{ lookup('file', './anastasiya.pub') }}"}
-
+   - name: Create Datadog Trivy log configuration directory
+     ansible.builtin.file:
+       path: /etc/datadog-agent/conf.d/trivy.d
+       state: directory
+       mode: "0755"
+   - name: Create Datadog Trivy log configuration file
+     ansible.builtin.copy:
+       dest: /etc/datadog-agent/conf.d/trivy.d/conf.yaml
+       mode: "0644"
+       content: |
+         logs:
+           - type: file
+             path: /var/log/trivy/*.json
+             service: trivy
+             source: trivy
+             sourcecategory: security
+     notify: Restart Datadog Agent
   handlers:
    - name: Restart SSH
      ansible.builtin.service:
        name: ssh
+       state: restarted
+   - name: Restart Datadog Agent
+     ansible.builtin.service:
+       name: datadog-agent
        state: restarted
