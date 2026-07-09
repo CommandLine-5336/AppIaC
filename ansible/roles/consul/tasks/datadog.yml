@@ -1,7 +1,6 @@
 ---
-- name: Change hostname in datadog
-  ansible.builtin.lineinfile:
-    path: /etc/datadog-agent/datadog.yaml
-    regexp: '^hostname:'
-    line: "hostname: {{ ansible_hostname }}"
+- name: Configure datadog.yaml
+  ansible.builtin.template:
+    src: datadog.yaml.j2
+    dest: "	/etc/datadog-agent/datadog.yaml"
   notify: Restart Datadog
