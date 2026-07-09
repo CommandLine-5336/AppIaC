@@ -111,8 +111,15 @@ module "web_sg" {
       from_port   = 80
       to_port     = 80
       ip_protocol = "tcp"
-      cidr_blocks = ["10.0.1.0/24"]
-      description = "HTTP from internal"
+      referenced_security_group_id = [module.lb_sg.id]
+      description = "HTTP from lb"
+    },
+    {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      referenced_security_group_id = [module.lb_sg.id]
+      description = "HTTPS from lb"
     },
     {
       from_port                    = 22
