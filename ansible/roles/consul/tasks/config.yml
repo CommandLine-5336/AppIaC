@@ -7,7 +7,7 @@
     mode: '0640'
   notify: Restart consul
 
-- name: add conf.yaml
+- name: Add conf.yaml
   ansible.builtin.template:
     src: conf.yaml.j2
     dest: "{{ consul_config_dir }}/conf.yaml"
