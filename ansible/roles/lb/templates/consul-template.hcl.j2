@@ -5,5 +5,5 @@ consul {
 template {
   source      = "/etc/consul-template.d/nginx.conf.ctmpl"
   destination = "/etc/nginx/sites-available/loadbalancer.conf"
-  command     = "sudo systemctl reload nginx"
+  command     = "systemctl reload nginx"
 }
