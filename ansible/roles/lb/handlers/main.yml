@@ -4,6 +4,12 @@
     name: nginx
     state: restarted
 
+- name: Restart consul-template
+  ansible.builtin.systemd:
+    name: consul-template
+    state: restarted
+    daemon_reload: yes
+
 - name: Reload consul
   ansible.builtin.systemd:
     name: consul

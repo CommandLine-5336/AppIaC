@@ -1,0 +1,42 @@
+---
+- name: Create consul-template config dir
+  ansible.builtin.file:
+    path: /etc/consul-template.d
+    state: directory
+    mode: '0755'
+
+- name: Copy nginx template file
+  ansible.builtin.copy:
+    src: nginx.conf.ctmpl
+    dest: /etc/consul-template.d/nginx.conf.ctmpl
+    mode: '0640'
+  notify: Restart consul-template
+
+- name: Configure consul-template
+  ansible.builtin.template:
+    src: consul-template.hcl.j2
+    dest: /etc/consul-template.d/config.hcl
+    mode: '0640'
+  notify: Restart consul-template
+
+- name: Install consul-template binary
+  ansible.builtin.unarchive:
+    src: "{{ lb_consul_template_url }}"
+    dest: /usr/local/bin
+    remote_src: yes
+    mode: '0755'
+  args:
+    creates: /usr/local/bin/consul-template
+
+- name: Deploy consul-template systemd unit
+  ansible.builtin.template:
+    src: consul-template.service.j2
+    dest: /etc/systemd/system/consul-template.service
+    mode: '0644'
+  notify: Restart consul-template
+
+- name: Start consul-template
+  ansible.builtin.systemd:
+    name: consul-template
+    state: started
+    enabled: yes
