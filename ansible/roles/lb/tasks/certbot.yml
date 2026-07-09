@@ -1,12 +1,4 @@
 ---
-- name: Lookup secretsmanager secret in the current region
-  ansible.builtin.debug: msg="{{ lookup('amazon.aws.aws_secret', '/path/to/secrets', bypath=true) }}"
-
-- name: Check if ssl exists
-    lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs')
-
-
----
 - name: Request Let's Encrypt certificate for Nginx
   hosts: webservers
   become: true
@@ -15,11 +7,47 @@
     www_domain: www.birdwatching.com
     email: commandlline@gmail.com
     webroot: /var/www/html
+    region: "us-east-1"
   tasks:
     - name: Ensure Nginx is running
       ansible.builtin.service:
         name: nginx
         state: started
+
+    - name: Try to lookup fullchain secret in AWS
+      ansible.builtin.set_fact:
+        aws_fullchain: "{{ lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs/fullchain', region=region) }}"
+      ignore_errors: yes
+      register: fullchain_res
+      failed_when: false
+
+    - name: Try to lookup privkey secret in AWS
+      ansible.builtin.set_fact:
+        aws_privkey: "{{ lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs/privkey', region=region) }}"
+      ignore_errors: yes
+      register: privkey_res
+      failed_when: false
+
+    - name: Checking if directory exists
+      ansible.builtin.file:
+        path: "/etc/letsencrypt/live/{{ domain }}"
+        state: directory
+        mode: '0755'
+      when: not fullchain_res.failed
+
+    - name: Write fullchain to local directory
+      ansible.builtin.copy:
+        content: "{{ aws_fullchain }}"
+        dest: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+        mode: '0644'
+      when: not fullchain_res.failed
+
+    - name: Write privkey to local directory
+      ansible.builtin.copy:
+        content: "{{ aws_privkey }}"
+        dest: "/etc/letsencrypt/live/{{ domain }}/privkey.pem"
+        mode: '0600'
+      when: not privkey_res.failed
 
     - name: Check if certificate already exists
       ansible.builtin.stat:
@@ -35,10 +63,46 @@
         --email {{ email }}
         -d {{ domain }}
         -d {{ www_domain }}
-      when: not cert_file.stat.exists
+      when: not cert_file.stat.exists and fullchain_res.failed and privkey_res.failed
       register: certbot_result
       changed_when: "'Successfully received certificate' in certbot_result.stdout"
       notify: Reload Nginx
+
+    - name: Retrieving fullchain
+      ansible.builtin.slurp:
+        src: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
+      when: certbot_result is changed
+      register: fullchain
+
+    - name: Retrieving privkey
+      ansible.builtin.slurp:
+        src: /etc/letsencrypt/live/{{ domain }}/privkey.pem
+      when: certbot_result is changed
+      register: privkey
+
+    - name: Create fullchain secret
+      community.aws.secretsmanager_secret:
+        name: birdwatching/ssl_certs/fullchain
+        description: "SSL certificate fullchain"
+        secret: "{{ fullchain['content'] | b64decode }}"
+        region: "us-east-1"
+        state: present
+        secret_type: "string"
+        tags:
+          Environment: dev
+      when: certbot_result is changed
+
+    - name: Create privkey secret
+      community.aws.secretsmanager_secret:
+        name: birdwatching/ssl_certs/privkey
+        description: "SSL certificate privkey"
+        secret: "{{ privkey['content'] | b64decode }}"
+        region: "us-east-1"
+        state: present
+        secret_type: "string"
+        tags:
+          Environment: dev
+      when: certbot_result is changed
 
     - name: Deploy Nginx SSL configuration
       ansible.builtin.template:
