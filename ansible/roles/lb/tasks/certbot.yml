@@ -47,7 +47,8 @@
 - name: Request certificate using certbot nginx plugin
   ansible.builtin.command: >
     certbot certonly
-    --nginx
+    --webroot
+    -w /var/www/html
     --non-interactive
     --agree-tos
     --email commandlline@gmail.com
