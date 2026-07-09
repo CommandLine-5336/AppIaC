@@ -106,4 +106,4 @@
     src: /etc/nginx/sites-available/birdwatching.com.conf
     dest: /etc/nginx/sites-enabled/birdwatching.com.conf
     state: link
-  notify: Reload
+  notify: Reload Nginx
