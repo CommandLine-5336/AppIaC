@@ -1,4 +1,6 @@
 ---
 - ansible.builtin.import_tasks: install.yml
-- ansible.builtin.import_tasks: lb_config.yml
+- ansible.builtin.import_tasks: consul_template.yml
+- ansible.builtin.import_tasks: nginx.yml
 - ansible.builtin.import_tasks: consul_register.yml
+- ansible.builtin.import_tasks: datadog.yml

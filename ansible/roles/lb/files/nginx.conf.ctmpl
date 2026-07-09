@@ -1,6 +1,7 @@
 upstream backend_servers {
-    server 10.0.1.39:80;
-    server 10.0.1.202:80;
+    {{ range service "web" }}
+    server {{ .Address }}:{{ .Port }};
+    {{ end }}
 }
 
 server {

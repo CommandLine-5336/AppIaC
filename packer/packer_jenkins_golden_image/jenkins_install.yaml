@@ -1,9 +1,17 @@
 ---
  - name: Install Jenkins
-   hosts: jenkins
-   remote_user: ubuntu
+   hosts: all
    become: true
    tasks:
+    - name: Change hostname in datadog
+      ansible.builtin.lineinfile:
+        path: /etc/datadog-agent/datadog.yaml
+        regexp: '^hostname:'
+        line: "hostname: Jenkins-{{ ansible_hostname }}"
+    - name: Restart Datadog
+      ansible.builtin.service:
+        name: datadog-agent
+        state: restarted
     - name: Show the extracted username
       ansible.builtin.set_fact:
        creds: "{{ lookup('amazon.aws.secretsmanager_secret', 'jenkins/admin-credentials', region='us-east-1') | from_json }}"

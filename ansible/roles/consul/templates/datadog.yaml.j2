@@ -1,0 +1,45 @@
+# Ansible managed
+
+site: datadoghq.com
+
+
+api_key: ENC[DatadogAgent/Production;api_key]
+
+
+remote_updates: False
+apm_config:
+    enabled: true
+hostname: Consul
+logs_enabled: true
+process_config:
+    enabled: 'false'
+secret_backend_config:
+    aws_session:
+        aws_region: us-east-1
+secret_backend_type: aws.secrets
+# dogstatsd_mapper_cache_size: 1000  # default to 1000
+dogstatsd_mapper_profiles:
+  - name: consul
+    prefix: "consul."
+    mappings:
+      - match: 'consul\.http\.([a-zA-Z]+)\.(.*)'
+        match_type: "regex"
+        name: "consul.http.request"
+        tags:
+          method: "$1"
+          path: "$2"
+      - match: 'consul\.raft\.replication\.appendEntries\.logs\.([0-9a-f-]+)'
+        match_type: "regex"
+        name: "consul.raft.replication.appendEntries.logs"
+        tags:
+          peer_id: "$1"
+      - match: 'consul\.raft\.replication\.appendEntries\.rpc\.([0-9a-f-]+)'
+        match_type: "regex"
+        name: "consul.raft.replication.appendEntries.rpc"
+        tags:
+          peer_id: "$1"
+      - match: 'consul\.raft\.replication\.heartbeat\.([0-9a-f-]+)'
+        match_type: "regex"
+        name: "consul.raft.replication.heartbeat"
+        tags:
+          peer_id: "$1"
