@@ -1,7 +1,7 @@
 web_app_name: BirdWatching
 web_app_dir: "/home/{{ web_user }}/{{ web_app_name }}"
 web_user: ubuntu
-web_app_port: 5000
+web_app_port: 4242
 web_consul_config_dir: /etc/consul.d
 
 web_db_host: "10.0.2.158"
