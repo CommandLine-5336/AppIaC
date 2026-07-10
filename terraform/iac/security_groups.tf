@@ -72,8 +72,8 @@ module "consul_sg" {
       description = "Consul TCP"
     },
     {
-      from_port   = 8501
-      to_port     = 8501
+      from_port   = 8301
+      to_port     = 8301
       ip_protocol = "tcp"
       cidr_blocks = ["10.0.0.0/16"]
       description = "Consul HTTPS"
@@ -145,8 +145,8 @@ module "lb_sg" {
       description                  = "Consul TCP"
     },
     {
-      from_port                    = 8501
-      to_port                      = 8501
+      from_port   = 8301
+      to_port     = 8301
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
       description                  = "Consul HTTPS"
@@ -209,8 +209,8 @@ module "web_sg" {
       description                  = "Consul TCP"
     },
     {
-      from_port                    = 8501
-      to_port                      = 8501
+      from_port   = 8301
+      to_port     = 8301
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
       description                  = "Consul HTTPS"
@@ -266,8 +266,8 @@ module "db_sg" {
       description                  = "Consul TCP"
     },
     {
-      from_port                    = 8501
-      to_port                      = 8501
+      from_port   = 8301
+      to_port     = 8301
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
       description                  = "Consul HTTPS"

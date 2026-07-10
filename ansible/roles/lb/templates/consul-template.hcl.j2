@@ -4,6 +4,6 @@ consul {
 
 template {
   source      = "/etc/consul-template.d/nginx.conf.ctmpl"
-  destination = "/etc/nginx/sites-available/birdswatching.site.conf"
+  destination = "/etc/nginx/sites-available/loadbalancer.conf"
   command     = "systemctl reload nginx"
 }
