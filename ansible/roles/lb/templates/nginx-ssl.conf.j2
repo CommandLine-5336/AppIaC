@@ -1,60 +1,32 @@
-upstream backend_servers {
-    {{ range service "web" }}
-    server {{ .Address }}:{{ .Port }};
-    {{ end }}
-}
-
-server {
-    listen 80;
-    server_name birdswatching.site www.birdswatching.site;
-
-    location /.well-known/acme-challenge/ {
-        root /var/www/letsencrypt;
-    }
-
-    location / {
-        return 301 https://$host$request_uri;
-    }
-}
-
-# HTTPS server
 server {
     listen 443 ssl http2;
     server_name birdswatching.site www.birdswatching.site;
 
-    # Let's Encrypt certificate paths
     ssl_certificate /etc/letsencrypt/live/birdswatching.site/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/birdswatching.site/privkey.pem;
 
-    # Strong SSL configuration
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
     ssl_prefer_server_ciphers off;
 
-    # SSL session optimization
     ssl_session_timeout 1d;
     ssl_session_cache shared:SSL:50m;
 
-    # OCSP stapling
     ssl_stapling on;
     ssl_stapling_verify on;
     ssl_trusted_certificate /etc/letsencrypt/live/birdswatching.site/chain.pem;
     resolver 8.8.8.8 8.8.4.4 valid=300s;
 
-    # Security headers
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
 
-    # Proxy to backend
-        location / {
+    location / {
         proxy_pass http://backend_servers;
-
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-
         proxy_connect_timeout 5s;
         proxy_read_timeout 60s;
     }
