@@ -57,7 +57,7 @@
   when: not lb_cert_file.stat.exists and lb_fullchain_res.failed and lb_privkey_res.failed
   register: lb_certbot_result
   changed_when: "'Successfully received certificate' in lb_certbot_result.stdout"
-  notify: Reload Nginx
+  notify: Restart Nginx
 
 - name: Retrieving fullchain
   ansible.builtin.slurp:
@@ -100,11 +100,11 @@
     src: templates/nginx-ssl-letsencrypt.conf.j2
     dest: /etc/nginx/sites-available/birdswatching.site.conf
     mode: '0644'
-  notify: Reload Nginx
+  notify: Restart Nginx
 
 - name: Enable site
   ansible.builtin.file:
     src: /etc/nginx/sites-available/birdswatching.site.conf
     dest: /etc/nginx/sites-enabled/birdswatching.site.conf
     state: link
-  notify: Reload Nginx
+  notify: Restart Nginx
