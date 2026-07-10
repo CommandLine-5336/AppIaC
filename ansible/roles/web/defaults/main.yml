@@ -4,5 +4,5 @@ web_user: ubuntu
 web_app_port: 4242
 web_consul_config_dir: /etc/consul.d
 
-web_db_host: "10.0.2.158"
+web_db_host: "10.0.2.210"
 web_db_port: 3306
