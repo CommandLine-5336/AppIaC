@@ -73,8 +73,8 @@
         bucket=$(aws s3 ls | awk '/security/ {print $3; exit}');
         INSTANCE_NAME=$(curl -s http://169.254.169.254/latest/meta-data/local-hostname);
         TIMESTAMP=$(date +\%Y\%m\%d_\%H\%M);
-        sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json \
-        --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd \
+        sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json
+        --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd
         --output "/var/log/trivy/$INSTANCE_NAME_trivy_scan_$TIMESTAMP.json" /
         &&
         aws s3 cp "/var/log/trivy/$INSTANCE_NAME_trivy_scan_$TIMESTAMP.json" "s3://$bucket/"
