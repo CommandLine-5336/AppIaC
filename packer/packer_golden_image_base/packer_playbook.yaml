@@ -105,13 +105,8 @@
              service: trivy
              source: trivy
              sourcecategory: security
-     notify: Restart Datadog Agent
   handlers:
    - name: Restart SSH
      ansible.builtin.service:
        name: ssh
-       state: restarted
-   - name: Restart Datadog Agent
-     ansible.builtin.service:
-       name: datadog-agent
        state: restarted
