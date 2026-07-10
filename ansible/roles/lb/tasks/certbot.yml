@@ -52,8 +52,8 @@
     --non-interactive
     --agree-tos
     --email commandlline@gmail.com
-    -d birdwatching.com
-    -d www.birdwatching.com
+    -d birdswatching.site
+    -d www.birdswatching.site
   when: not lb_cert_file.stat.exists and lb_fullchain_res.failed and lb_privkey_res.failed
   register: lb_certbot_result
   changed_when: "'Successfully received certificate' in lb_certbot_result.stdout"

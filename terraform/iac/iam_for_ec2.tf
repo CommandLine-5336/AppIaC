@@ -184,9 +184,16 @@ module "lb_role" {
           Effect = "Allow"
           Action = [
             "secretsmanager:GetSecretValue",
-            "secretsmanager:DescribeSecret"
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:CreateSecret",
+            "secretsmanager:PutSecretValue",
+            "secretsmanager:TagResource"
           ]
-          Resource = [format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id)]
+          Resource = [
+              format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id),
+              format("arn:aws:secretsmanager:%s:%s:secret:birdwatching/ssl_certs/fullchain-*", var.region, var.caller_id),
+              format("arn:aws:secretsmanager:%s:%s:secret:birdwatching/ssl_certs/privkey-*", var.region, var.caller_id)
+          ]
         }
       ]
     })
