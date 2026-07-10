@@ -97,7 +97,7 @@
 
 - name: Deploy Nginx SSL configuration
   ansible.builtin.template:
-    src: templates/nginx-ssl-letsencrypt.conf.j2
+    src: templates/nginx-ssl.conf.j2
     dest: /etc/nginx/sites-available/birdswatching.site.conf
     mode: '0644'
   notify: Restart Nginx
