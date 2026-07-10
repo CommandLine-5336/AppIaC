@@ -8,7 +8,12 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
-    server_name _;
+    server_name birdwatching.com www.birdwatching.com;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+        allow all;
+    }
 
     location / {
         proxy_pass http://backend_servers;
@@ -22,3 +27,4 @@ server {
         proxy_read_timeout 60s;
     }
 }
+

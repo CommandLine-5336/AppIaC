@@ -1,0 +1,110 @@
+---
+- name: Ensure Nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+
+- name: Try to lookup fullchain secret in AWS
+  ansible.builtin.set_fact:
+    lb_aws_fullchain: "{{ lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs/fullchain', region='us-east-1') }}"
+  ignore_errors: yes
+  register: lb_fullchain_res
+  failed_when: false
+
+- name: Try to lookup privkey secret in AWS
+  ansible.builtin.set_fact:
+    lb_aws_privkey: "{{ lookup('amazon.aws.aws_secret', 'birdwatching/ssl_certs/privkey', region='us-east-1') }}"
+  ignore_errors: yes
+  register: lb_privkey_res
+  failed_when: false
+
+- name: Checking if directory exists
+  ansible.builtin.file:
+    path: "/etc/letsencrypt/live/birdwatching.com"
+    state: directory
+    mode: '0755'
+  when: not lb_fullchain_res.failed
+
+- name: Write fullchain to local directory
+  ansible.builtin.copy:
+    content: "{{ lb_aws_fullchain }}"
+    dest: "/etc/letsencrypt/live/birdwatching.com/fullchain.pem"
+    mode: '0644'
+  when: not lb_fullchain_res.failed
+
+- name: Write privkey to local directory
+  ansible.builtin.copy:
+    content: "{{ lb_aws_privkey }}"
+    dest: "/etc/letsencrypt/live/birdwatching.com/privkey.pem"
+    mode: '0600'
+  when: not lb_privkey_res.failed
+
+- name: Check if certificate already exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/birdwatching.com/fullchain.pem"
+  register: lb_cert_file
+
+- name: Request certificate using certbot nginx plugin
+  ansible.builtin.command: >
+    certbot certonly
+    --webroot
+    -w /var/www/html
+    --non-interactive
+    --agree-tos
+    --email commandlline@gmail.com
+    -d birdwatching.com
+    -d www.birdwatching.com
+  when: not lb_cert_file.stat.exists and lb_fullchain_res.failed and lb_privkey_res.failed
+  register: lb_certbot_result
+  changed_when: "'Successfully received certificate' in lb_certbot_result.stdout"
+  notify: Reload Nginx
+
+- name: Retrieving fullchain
+  ansible.builtin.slurp:
+    src: /etc/letsencrypt/live/birdwatching.com/fullchain.pem
+  when: lb_certbot_result is changed
+  register: lb_fullchain
+
+- name: Retrieving privkey
+  ansible.builtin.slurp:
+    src: /etc/letsencrypt/live/birdwatching.com/privkey.pem
+  when: lb_certbot_result is changed
+  register: lb_privkey
+
+- name: Create fullchain secret
+  community.aws.secretsmanager_secret:
+    name: birdwatching/ssl_certs/fullchain
+    description: "SSL certificate fullchain"
+    secret: "{{ lb_fullchain['content'] | b64decode }}"
+    region: "us-east-1"
+    state: present
+    secret_type: "string"
+    tags:
+      Environment: dev
+  when: lb_certbot_result is changed
+
+- name: Create privkey secret
+  community.aws.secretsmanager_secret:
+    name: birdwatching/ssl_certs/privkey
+    description: "SSL certificate privkey"
+    secret: "{{ lb_privkey['content'] | b64decode }}"
+    region: "us-east-1"
+    state: present
+    secret_type: "string"
+    tags:
+      Environment: dev
+  when: lb_certbot_result is changed
+
+- name: Deploy Nginx SSL configuration
+  ansible.builtin.template:
+    src: templates/nginx-ssl-letsencrypt.conf.j2
+    dest: /etc/nginx/sites-available/birdwatching.com.conf
+    mode: '0644'
+  notify: Reload Nginx
+
+- name: Enable site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/birdwatching.com.conf
+    dest: /etc/nginx/sites-enabled/birdwatching.com.conf
+    state: link
+  notify: Reload Nginx
