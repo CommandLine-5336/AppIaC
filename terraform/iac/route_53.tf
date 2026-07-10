@@ -3,26 +3,26 @@ resource "aws_route53_zone" "birdswatching_zone" {
 }
 
 module "route_53_reg" {
-    source = "../modules/route_53_record"
+  source = "../modules/route_53_record"
 
-    zone_id = aws_route53_zone.birdswatching_zone.id
-    zone_name = "birdswatching.site"
-    domain_name = "birdswatching.site"
-    type = "A"
-    ttl = "300"
-    records = [module.lb_ec2.public_ip]
+  zone_id     = aws_route53_zone.birdswatching_zone.id
+  zone_name   = "birdswatching.site"
+  domain_name = "birdswatching.site"
+  type        = "A"
+  ttl         = "300"
+  records     = [module.lb_ec2.public_ip]
 
 }
 
 module "route_53_www" {
-    source = "../modules/route_53_record"
+  source = "../modules/route_53_record"
 
-    zone_id = aws_route53_zone.birdswatching_zone.id
-    zone_name = "birdswatching.site"
-    domain_name = "www.birdswatching.site"
-    type = "A"
-    ttl = "300"
-    records = [module.lb_ec2.public_ip]
+  zone_id     = aws_route53_zone.birdswatching_zone.id
+  zone_name   = "birdswatching.site"
+  domain_name = "www.birdswatching.site"
+  type        = "A"
+  ttl         = "300"
+  records     = [module.lb_ec2.public_ip]
 }
 
 

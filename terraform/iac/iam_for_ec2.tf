@@ -190,9 +190,9 @@ module "lb_role" {
             "secretsmanager:TagResource"
           ]
           Resource = [
-              format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id),
-              format("arn:aws:secretsmanager:%s:%s:secret:birdwatching/ssl_certs/fullchain-*", var.region, var.caller_id),
-              format("arn:aws:secretsmanager:%s:%s:secret:birdwatching/ssl_certs/privkey-*", var.region, var.caller_id)
+            format("arn:aws:secretsmanager:%s:%s:secret:DatadogAgent/Production-*", var.region, var.caller_id),
+            format("arn:aws:secretsmanager:%s:%s:secret:birdswatching/ssl_certs/fullchain-*", var.region, var.caller_id),
+            format("arn:aws:secretsmanager:%s:%s:secret:birdswatching/ssl_certs/privkey-*", var.region, var.caller_id)
           ]
         }
       ]

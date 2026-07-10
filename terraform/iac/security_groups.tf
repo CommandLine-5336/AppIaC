@@ -138,25 +138,25 @@ module "lb_sg" {
       description                  = "SSH from jenkins"
     },
     {
-      from_port   = 8500
-      to_port     = 8500
-      ip_protocol = "tcp"
+      from_port                    = 8500
+      to_port                      = 8500
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul TCP"
+      description                  = "Consul TCP"
     },
     {
-      from_port   = 8501
-      to_port     = 8501
-      ip_protocol = "tcp"
+      from_port                    = 8501
+      to_port                      = 8501
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTPS"
+      description                  = "Consul HTTPS"
     },
     {
-      from_port   = 8300
-      to_port     = 8300
-      ip_protocol = "tcp"
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTP"
+      description                  = "Consul HTTP"
     }
   ]
 
@@ -202,25 +202,25 @@ module "web_sg" {
       description                  = "SSH from jenkins"
     },
     {
-      from_port   = 8500
-      to_port     = 8500
-      ip_protocol = "tcp"
+      from_port                    = 8500
+      to_port                      = 8500
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul TCP"
+      description                  = "Consul TCP"
     },
     {
-      from_port   = 8501
-      to_port     = 8501
-      ip_protocol = "tcp"
+      from_port                    = 8501
+      to_port                      = 8501
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTPS"
+      description                  = "Consul HTTPS"
     },
     {
-      from_port   = 8300
-      to_port     = 8300
-      ip_protocol = "tcp"
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTP"
+      description                  = "Consul HTTP"
     }
   ]
 
@@ -259,25 +259,25 @@ module "db_sg" {
       description                  = "SSH from jenkins"
     },
     {
-      from_port   = 8500
-      to_port     = 8500
-      ip_protocol = "tcp"
+      from_port                    = 8500
+      to_port                      = 8500
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul TCP"
+      description                  = "Consul TCP"
     },
     {
-      from_port   = 8501
-      to_port     = 8501
-      ip_protocol = "tcp"
+      from_port                    = 8501
+      to_port                      = 8501
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTPS"
+      description                  = "Consul HTTPS"
     },
     {
-      from_port   = 8300
-      to_port     = 8300
-      ip_protocol = "tcp"
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
       referenced_security_group_id = [module.consul_sg.id]
-      description = "Consul HTTP"
+      description                  = "Consul HTTP"
     }
   ]
 
