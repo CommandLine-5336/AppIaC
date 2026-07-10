@@ -6,7 +6,6 @@ module "route_53_reg" {
   source = "../modules/route_53_record"
 
   zone_id     = aws_route53_zone.birdswatching_zone.id
-  zone_name   = "birdswatching.site"
   domain_name = "birdswatching.site"
   type        = "A"
   ttl         = "300"
@@ -18,7 +17,6 @@ module "route_53_www" {
   source = "../modules/route_53_record"
 
   zone_id     = aws_route53_zone.birdswatching_zone.id
-  zone_name   = "birdswatching.site"
   domain_name = "www.birdswatching.site"
   type        = "A"
   ttl         = "300"
