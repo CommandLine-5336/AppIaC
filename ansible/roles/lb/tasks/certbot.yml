@@ -4,12 +4,18 @@
     name: nginx
     state: started
 
+- name: Check if certificate already exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/birdswatching.site/fullchain.pem"
+  register: lb_cert_file
+
 - name: Try to lookup fullchain secret in AWS
   ansible.builtin.set_fact:
     lb_aws_fullchain: "{{ lookup('amazon.aws.aws_secret', 'birdswatching/ssl_certs/fullchain', region='us-east-1') }}"
   ignore_errors: yes
   register: lb_fullchain_res
   failed_when: false
+  when: not lb_cert_file.stat.exists
 
 - name: Try to lookup privkey secret in AWS
   ansible.builtin.set_fact:
@@ -17,32 +23,28 @@
   ignore_errors: yes
   register: lb_privkey_res
   failed_when: false
+  when: not lb_cert_file.stat.exists
 
 - name: Checking if directory exists
   ansible.builtin.file:
     path: "/etc/letsencrypt/live/birdswatching.site"
     state: directory
     mode: '0755'
-  when: not lb_fullchain_res.failed
+  when: not lb_cert_file.stat.exists and not lb_fullchain_res.failed
 
 - name: Write fullchain to local directory
   ansible.builtin.copy:
     content: "{{ lb_aws_fullchain }}"
     dest: "/etc/letsencrypt/live/birdswatching.site/fullchain.pem"
     mode: '0644'
-  when: not lb_fullchain_res.failed
+  when: not lb_cert_file.stat.exists and not lb_fullchain_res.failed
 
 - name: Write privkey to local directory
   ansible.builtin.copy:
     content: "{{ lb_aws_privkey }}"
     dest: "/etc/letsencrypt/live/birdswatching.site/privkey.pem"
     mode: '0600'
-  when: not lb_privkey_res.failed
-
-- name: Check if certificate already exists
-  ansible.builtin.stat:
-    path: "/etc/letsencrypt/live/birdswatching.site/fullchain.pem"
-  register: lb_cert_file
+  when: not lb_cert_file.stat.exists and not lb_privkey_res.failed
 
 - name: Request certificate using certbot nginx plugin
   ansible.builtin.command: >
@@ -100,6 +102,7 @@
     src: nginx-ssl.conf.j2
     dest: /etc/nginx/sites-available/birdswatching.site.conf
     mode: '0644'
+  when: lb_cert_file.stat.exists or lb_certbot_result is changed
   notify: Restart Nginx
 
 - name: Enable site
@@ -107,4 +110,5 @@
     src: /etc/nginx/sites-available/birdswatching.site.conf
     dest: /etc/nginx/sites-enabled/birdswatching.site.conf
     state: link
+  when: lb_cert_file.stat.exists or lb_certbot_result is changed
   notify: Restart Nginx
