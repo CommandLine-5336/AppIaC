@@ -1,7 +1,7 @@
 {
   "service": {
     "name": "web",
-    "port": {{ web_app_port }},
+    "port": 80,
     "tags": ["gunicorn", "flask"],
     "check": {
       "http": "http://127.0.0.1:{{ web_app_port }}/",
