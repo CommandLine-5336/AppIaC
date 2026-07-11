@@ -38,5 +38,5 @@
 - name: Start consul-template
   ansible.builtin.systemd:
     name: consul-template
-    state: started
+    state: restarted
     enabled: yes

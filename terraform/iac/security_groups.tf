@@ -56,6 +56,58 @@ module "jenkins_sg" {
   }
 }
 
+module "consul_sg" {
+  source = "../modules/security_group"
+
+  name        = "consul"
+  description = "Security group for consul servers"
+  vpc_id      = module.vpc.id
+
+  ingress_rules = [
+    {
+      from_port   = 8500
+      to_port     = 8500
+      ip_protocol = "tcp"
+      cidr_blocks = ["10.0.0.0/16"]
+      description = "Consul TCP"
+    },
+    {
+      from_port   = 8301
+      to_port     = 8301
+      ip_protocol = "tcp"
+      cidr_blocks = ["10.0.0.0/16"]
+      description = "Consul HTTPS"
+    },
+    {
+      from_port   = 8300
+      to_port     = 8300
+      ip_protocol = "tcp"
+      cidr_blocks = ["10.0.0.0/16"]
+      description = "Consul HTTP"
+    },
+    {
+      from_port                    = 22
+      to_port                      = 22
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.jenkins_sg.id]
+      description                  = "SSH from jenkins"
+    }
+  ]
+
+  egress_rules = [
+    {
+      ip_protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+
 module "lb_sg" {
   source = "../modules/security_group"
 
@@ -84,6 +136,27 @@ module "lb_sg" {
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
+    },
+    {
+      from_port                    = 8500
+      to_port                      = 8500
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul TCP"
+    },
+    {
+      from_port                    = 8301
+      to_port                      = 8301
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTPS"
+    },
+    {
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTP"
     }
   ]
 
@@ -127,6 +200,27 @@ module "web_sg" {
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
+    },
+    {
+      from_port                    = 8500
+      to_port                      = 8500
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul TCP"
+    },
+    {
+      from_port                    = 8301
+      to_port                      = 8301
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTPS"
+    },
+    {
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTP"
     }
   ]
 
@@ -163,57 +257,27 @@ module "db_sg" {
       ip_protocol                  = "tcp"
       referenced_security_group_id = [module.jenkins_sg.id]
       description                  = "SSH from jenkins"
-    }
-  ]
-
-  egress_rules = [
-    {
-      ip_protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  ]
-
-
-  tags = {
-    Environment = var.environment
-  }
-}
-
-module "consul_sg" {
-  source = "../modules/security_group"
-
-  name        = "consul"
-  description = "Security group for consul servers"
-  vpc_id      = module.vpc.id
-
-  ingress_rules = [
-    {
-      from_port   = 8500
-      to_port     = 8500
-      ip_protocol = "tcp"
-      cidr_blocks = ["10.0.0.0/16"]
-      description = "Consul TCP"
     },
     {
-      from_port   = 8501
-      to_port     = 8501
-      ip_protocol = "tcp"
-      cidr_blocks = ["10.0.0.0/16"]
-      description = "Consul HTTPS"
-    },
-    {
-      from_port   = 8300
-      to_port     = 8300
-      ip_protocol = "tcp"
-      cidr_blocks = ["10.0.0.0/16"]
-      description = "Consul HTTP"
-    },
-    {
-      from_port                    = 22
-      to_port                      = 22
+      from_port                    = 8500
+      to_port                      = 8500
       ip_protocol                  = "tcp"
-      referenced_security_group_id = [module.jenkins_sg.id]
-      description                  = "SSH from jenkins"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul TCP"
+    },
+    {
+      from_port                    = 8301
+      to_port                      = 8301
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTPS"
+    },
+    {
+      from_port                    = 8300
+      to_port                      = 8300
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = [module.consul_sg.id]
+      description                  = "Consul HTTP"
     }
   ]
 
