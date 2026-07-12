@@ -36,7 +36,7 @@ To install Terraform on Windows:
 Install "Chocolatey" if you don`t have it, then run:
 - `choco install terraform`
 
-To verify successfull installation run `terraform -help`. You should see the list of available commands.
+To verify successful installation run `terraform -help`. You should see the list of available commands.
 
 ## Usage
 - Creating S3 bucket for terraform state
@@ -44,11 +44,11 @@ First cd to /state_bucket directory.
 Change env, caller_identity and region to needed values.
 Run `terraform init`.
 Then run `terraform plan`. You will be given the list of changes that are going to be applied, make sure that the changes are exactly what you need.
-Run `terraform apply`. S3 bucket for terraform state wil be created and its name will be shown. Copy that name.
+Run `terraform apply`. S3 bucket for terraform state will be created and its name will be shown. Copy that name.
 - Configuring the rest of infrastructure
 cd to /iac.
 In /tstate_to_s3 file change the value of "bucket" field to copied name.
-Change environmet, region and caller_id in /variables file to needed values.
+Change environment, region and caller_id in /variables file to needed values.
 Run `terraform init`.
 Then run `terraform plan`. You will be given the list of changes that are going to be applied, make sure that the changes are exactly what you need.
 Run `terraform apply`. All the resources specified higher will be created. Terraform state will be uploaded to specified S3 bucket.
