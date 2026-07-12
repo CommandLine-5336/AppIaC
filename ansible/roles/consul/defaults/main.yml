@@ -8,7 +8,7 @@ consul_client_addr: "0.0.0.0"
 consul_server: false
 consul_retry_join: []
 consul_gossip_key: "{{ consul_gossip_key }}"
-consul_agent_token: ""
+consul_agent_token: "{{ consul_agent_token }}"
 
 consul_arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
 consul_download_url: >-
