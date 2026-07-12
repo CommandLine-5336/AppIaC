@@ -4,6 +4,10 @@ bind_addr = "{{ consul_bind_addr }}"
 client_addr = "{{ consul_client_addr | default('127.0.0.1') }}"
 server = {{ consul_server | lower }}
 
+encrypt = "{{ consul_gossip_key }}"
+encrypt_verify_incoming = true
+encrypt_verify_outgoing = true
+
 {% if consul_server %}
 bootstrap_expect = {{ consul_bootstrap_expect }}
 {% endif %}
