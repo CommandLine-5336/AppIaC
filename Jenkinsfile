@@ -20,12 +20,17 @@ pipeline {
                     string(
                         credentialsId: 'gossip_key',
                         variable: 'GOSSIP_KEY'
+                    ),
+                    string(
+                        credentialsId: 'agent_token',
+                        variable: 'AGENT_TOKEN'
                     )
                 ]) {
                     ansiblePlaybook(
                         credentialsId: 'vm_ssh_key',
                         extraVars: [
-                            consul_gossip_key: "$GOSSIP_KEY"
+                            consul_gossip_key: "$GOSSIP_KEY",
+                            consul_agent_token: "$AGENT_TOKEN"
                         ],
                         installation: "Ansible",
                         playbook: 'ansible/consul_playbook.yml'
