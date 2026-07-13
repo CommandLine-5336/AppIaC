@@ -7,7 +7,7 @@
       ansible.builtin.lineinfile:
         path: /etc/datadog-agent/datadog.yaml
         regexp: '^hostname:'
-        line: "hostname: Jenkins-{{ ansible_hostname }}"
+        line: "hostname: Jenkins"
     - name: Restart Datadog
       ansible.builtin.service:
         name: datadog-agent
@@ -72,3 +72,21 @@
       ansible.builtin.service:
         name: jenkins
         state: restarted
+    - name: Install ansible
+      ansible.builtin.apt:
+        name: ansible
+        state: present
+    - name: Install collections necessary for jenkins job execution
+      ansible.builtin.shell: |
+        ansible-galaxy collection install {{ item }}
+      loop:
+        - amazon.aws
+        - ansible.mysql
+    - name: Give ownership to jenkins user
+      ansible.builtin.file:
+        path: /root/.ansible/collections
+        owner: jenkins
+        group: jenkins
+        recurse: true
+        state: directory
+        mode: '0755'

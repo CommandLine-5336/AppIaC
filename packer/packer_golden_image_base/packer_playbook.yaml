@@ -66,15 +66,18 @@
    - name: Run trivy scan regularly
      ansible.builtin.cron:
        name: "Run trivy scan"
-       minute: "*"
+       minute: "0"
        hour: "*/2"
        user: root
        job: >
-        sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json \
-        --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd \
-        --output "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%\Y%m\%d_\%H\%M).json" /
+        bucket=$(aws s3 ls | awk '/security/ {print $3; exit}');
+        INSTANCE_NAME=$(curl -s http://169.254.169.254/latest/meta-data/local-hostname);
+        TIMESTAMP=$(date +\%Y\%m\%d_\%H\%M);
+        sudo trivy fs --severity HIGH,CRITICAL --timeout 10m --offline-scan --format json
+        --skip-dirs /var/lib/apt,/proc,/sys,/var/lib/docker,/var/lib/snapd
+        --output "/var/log/trivy/$INSTANCE_NAME_trivy_scan_$TIMESTAMP.json" /
         &&
-        aws s3 cp "/var/log/trivy/$(hostname)_trivy_scan_$(date +\%Y\%m\%d_\%H\%M).json" "s3://security-scan-bucket-704427427594-us-east-1/"
+        aws s3 cp "/var/log/trivy/$INSTANCE_NAME_trivy_scan_$TIMESTAMP.json" "s3://$bucket/"
    - name: Add ssh keys for the entire team
      ansible.posix.authorized_key:
        user: "{{ item.user }}"
@@ -86,7 +89,22 @@
        - {user: ubuntu, key: "{{ lookup('file', './maksym.pub') }}"}
        - {user: ubuntu, key: "{{ lookup('file', './marta.pub') }}"}
        - {user: ubuntu, key: "{{ lookup('file', './anastasiya.pub') }}"}
-
+   - name: Create Datadog Trivy log configuration directory
+     ansible.builtin.file:
+       path: /etc/datadog-agent/conf.d/trivy.d
+       state: directory
+       mode: "0755"
+   - name: Create Datadog Trivy log configuration file
+     ansible.builtin.copy:
+       dest: /etc/datadog-agent/conf.d/trivy.d/conf.yaml
+       mode: "0644"
+       content: |
+         logs:
+           - type: file
+             path: /var/log/trivy/*.json
+             service: trivy
+             source: trivy
+             sourcecategory: security
   handlers:
    - name: Restart SSH
      ansible.builtin.service:
