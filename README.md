@@ -1,12 +1,53 @@
 # APP Infrastructure as Code
+
 ## pre-commit hook installation
+
 * In order to install pre-commit hooks in terminal execute following commands:
+
 1.
     * For Ubuntu `sudo apt install pre-commit`
     * For windows `pip install pre-commit`
     * For Mac `brew install pre-commit`
 2. `pre-commit install` inside of the folder with .pre-commit-config.yaml
 3. Done
+
+## Ansible Roles Overview
+
+Infrastructure is provisioned via four Ansible roles: `consul`, `db`, `web`, `lb`. Each role follows the same structure (`tasks/`, `templates/`, `handlers/`, `defaults/`) and is responsible for one server type only.
+
+### consul
+
+Installs and configures a Consul agent on every server. Handles cluster formation, service discovery, and security hardening (gossip encryption, ACL).
+
+**Key variables** (`roles/consul/defaults/main.yml`):
+
+| Variable | Description |
+| --- | --- |
+| `consul_server` | `true` on the Consul server host, `false` on all clients (db, web, lb) |
+| `consul_retry_join` | List of Consul server addresses used to join the cluster |
+| `consul_gossip_key` | Shared encryption key for gossip traffic between agents. **Must be generated once** (`consul keygen`) and passed as a secret — never hardcoded in the repo |
+| `consul_acl_enabled` | Enables ACL (`default_policy = deny`) |
+| `consul_agent_token` | Token used by agents for registration and service discovery. **Must be generated once** on the Consul server (`consul acl bootstrap` + `policy create` + `token create`) and passed as a secret |
+
+**Setup note:** gossip key and ACL bootstrap are one-time manual steps performed directly on the Consul server — see "Set up secrets" below for how they're passed to the pipeline. Ansible only distributes already-generated values.
+
+### db
+
+Installs MariaDB, creates the application database and user, and registers the `db` service in Consul with a TCP health check.
+
+### web
+
+Deploys the Flask application (via Gunicorn + Nginx), sets up the `.env` file from secrets, and registers the `web` service in Consul with an HTTP health check.
+
+### lb
+
+Configures Nginx as a load balancer. Instead of hardcoded backend IPs, it runs `consul-template`, which watches Consul for healthy `web` instances and automatically regenerates the Nginx upstream config — no manual editing required when web servers are added, removed, or fail a health check.
+
+### Service discovery flow
+
+1. Each service (`db`, `web`, `lb`) registers itself in Consul on startup, with a periodic health check (10s interval)
+2. `consul-template` on the `lb` host reads the list of healthy `web` instances from Consul and regenerates `nginx.conf` automatically
+3. If a `web` instance fails its health check, it's excluded from the config on the next render — no manual load balancer reconfiguration needed
 
 ## How to set up Jenkins with Ansible
 
