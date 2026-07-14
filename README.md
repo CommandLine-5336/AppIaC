@@ -24,7 +24,6 @@ Installs and configures a Consul agent on every server. Handles cluster formatio
 | Variable | Description |
 | --- | --- |
 | `consul_server` | `true` on the Consul server host, `false` on all clients (db, web, lb) |
-| `consul_bind_addr` | IP address the agent binds to (set per-host in inventory) |
 | `consul_retry_join` | List of Consul server addresses used to join the cluster |
 | `consul_gossip_key` | Shared encryption key for gossip traffic between agents. **Must be generated once** (`consul keygen`) and passed as a secret — never hardcoded in the repo |
 | `consul_acl_enabled` | Enables ACL (`default_policy = deny`) |
