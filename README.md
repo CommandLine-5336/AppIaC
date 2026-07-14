@@ -1,4 +1,4 @@
-# APPIaC
+# APP Infrastructure as Code
 ## pre-commit hook installation
 * In order to install pre-commit hooks in terminal execute following commands:
 1.
@@ -7,3 +7,51 @@
     * For Mac `brew install pre-commit`
 2. `pre-commit install` inside of the folder with .pre-commit-config.yaml
 3. Done
+
+## How to set up Jenkins with Ansible
+
+1. [Install Jenkins](https://www.jenkins.io/doc/book/installing/linux/#debianubuntu)
+
+2. Go to <http://jenkins_machine_ip:8080> (or <http://localhost:8080>
+if setting up on a host machine) and follow installation guide
+
+    * When prompted, install recommended plugins
+
+3. [Install Ansible globally](https://docs.ansible.com/projects/ansible/latest/installation_guide/installation_distros.html#installing-ansible-on-ubuntu)
+
+4. [Install Jenkins plugin for Ansible](https://plugins.jenkins.io/ansible/)
+
+    * Go to Manage Jenkins -> Plugins -> Available plugins
+    * Search 'Ansible' and download first option
+    * Go to Manage Jenkins -> Tools -> Ansible installation -> Add Ansible
+    * Name the installation `Ansible` and use `/usr/bin` as path
+    * Click 'Save'
+
+5. Import pipeline:
+
+    * Click New Item on the home page
+    * Select 'Pipeline' item type and name your pipeline
+    * Go to Pipeline -> Definition and choose
+    'Pipeline script from SCM'
+    * Choose Git and paste this repository URL
+    * Paste `refs/heads/main` as 'Branch Specifier'
+    * Click 'Save'
+
+6. Set up secrets:
+
+    * Go to Manage Jenkins -> Credentials -> System ->
+    Global credentials -> Add Credentials
+    * Add SSH key for the virtual machines and use `vm_ssh_key` as the
+    credentials' ID
+    * Add AWS region `app_s3_region` and bucket name `app_s3_bucket`
+    * Add secrets for the playbooks with the following IDs:
+
+    1. `database_name` (Secret text)
+    2. `database_credentials` (Username with password)
+    3. `flask_secret_key` (Secret text)
+    4. `app_s3_bucket` (Secret text)
+    5. `app_s3_region` (Secret text)
+    6. `gossip_key` (Secret text) - it should be previously generated on the Consul server
+    7. `agent_token` (Secret text) - it should be previously generated on the Consul server
+
+7. Run the pipeline
