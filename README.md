@@ -1,6 +1,9 @@
 # APP Infrastructure as Code
+
 ## pre-commit hook installation
+
 * In order to install pre-commit hooks in terminal execute following commands:
+
 1.
     * For Ubuntu `sudo apt install pre-commit`
     * For windows `pip install pre-commit`
@@ -18,9 +21,9 @@ Installs and configures a Consul agent on every server. Handles cluster formatio
 
 **Key variables** (`roles/consul/defaults/main.yml`):
 
-|Variable|Description|
-|---|---|
-|`consul_server`|`true` on the Consul server host, `false` on all clients (db, web, lb)|
+| Variable | Description |
+| --- | --- |
+| `consul_server` | `true` on the Consul server host, `false` on all clients (db, web, lb) |
 | `consul_bind_addr` | IP address the agent binds to (set per-host in inventory) |
 | `consul_retry_join` | List of Consul server addresses used to join the cluster |
 | `consul_gossip_key` | Shared encryption key for gossip traffic between agents. **Must be generated once** (`consul keygen`) and passed as a secret — never hardcoded in the repo |
